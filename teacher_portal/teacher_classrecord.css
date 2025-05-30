@@ -1,0 +1,178 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #e7f0fd;
+  padding: 40px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #2b4d70;
+}
+
+.sheet-box {
+  margin: 0 auto;
+  background: #fafdff;
+  border-radius: 14px;
+  box-shadow: 0 4px 30px #8ab6f9;
+  padding: 36px 18px 24px 18px;
+  max-width: 98vw;
+  overflow-x: auto;
+  border: 2px solid #b3c8e6;
+}
+
+/* Center the class selection form */
+#class-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  padding: 40px 0 36px 0;
+}
+
+/* Adjust size of select and button elements */
+#class-select,
+#subject-select {
+  width: 320px;
+  max-width: 90vw;
+  min-width: 200px;
+  font-size: 1.07em;
+  padding: 10px 12px;
+  margin-bottom: 22px;
+}
+
+#class-selection label {
+  font-size: 1.08em;
+  margin-bottom: 6px;
+  align-self: flex-start;
+  width: 320px;
+  max-width: 90vw;
+  min-width: 200px;
+}
+
+#start-record-btn {
+  width: 320px;
+  max-width: 90vw;
+  font-size: 1.07em;
+  padding: 12px 0;
+  margin-top: 12px;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 500px) {
+  #class-select,
+  #subject-select,
+  #class-selection label,
+  #start-record-btn {
+    width: 97vw;
+    min-width: unset;
+    max-width: 100vw;
+    font-size: 1em;
+    padding: 8px 0;
+  }
+  #class-selection {
+    min-height: 220px;
+    padding: 15px 0 20px 0;
+  }
+}
+
+/* ...rest of your styles unchanged... */
+table {
+  border-collapse: collapse;
+  margin: 0 auto 20px auto;
+  font-size: 0.97em;
+  background: #fafdff;
+  min-width: 1200px;
+}
+th, td {
+  border: 1px solid #b3c8e6;
+  padding: 5px 8px;
+  text-align: center;
+}
+th {
+  background: #d4e6fa;
+  font-weight: bold;
+  color: #234060;
+}
+.ww-header { background: #c6e2fa !important; }
+.pt-header { background: #e3f2fd !important; }
+.qa-header { background: #b7d8f9 !important; }
+
+.left-head {
+  background: #dbeafe !important;
+  min-width: 38px;
+  width: 38px;
+  max-width: 45px;
+}
+
+.student-name-head {
+  background: #dbeafe !important;
+  min-width: 175px;
+  width: 200px;
+  text-align: left !important;
+  padding-left: 18px !important;
+  color: #2b4d70;
+}
+tbody td:nth-child(2) {
+  background: #e8f1fa;
+  text-align: left;
+  padding-left: 18px;
+  font-weight: 500;
+}
+tbody td:nth-child(2) input[type="text"] {
+  background: #e8f1fa;
+  border: none;
+  font-weight: 500;
+  width: 97%;
+}
+
+input[type="number"], input[type="text"] {
+  width: 55px;
+  padding: 2px 4px;
+  font-size: 0.97em;
+  border-radius: 2px;
+  border: 1px solid #c3d5f4;
+  background: #fafdff;
+}
+input[type="text"] {
+  width: 97%;
+  min-width: 120px;
+  max-width: 210px;
+}
+button {
+  display: block;
+  margin: 24px auto 0 auto;
+  padding: 8px 18px;
+  background: #4695e6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 2px 6px #6ea8fe33;
+}
+button:hover {
+  background: #3586d0;
+}
+tfoot td, .computed {
+  background: #eaf3fd;
+  font-weight: bold;
+}
+#highestRow input[type="number"] {
+  background: #e7f0fd;
+  width: 50px;
+}
+@media (max-width: 1350px) {
+  .sheet-box {
+    padding: 8px 2vw 20px 2vw;
+  }
+  table {
+    min-width: 900px;
+    font-size: 0.93em;
+  }
+  .student-name-head, tbody td:nth-child(2) input[type="text"] {
+    min-width: 90px;
+    width: 110px;
+  }
+}

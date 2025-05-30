@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grade Sheet</title>
+  <link rel="stylesheet" href="teacher_classrecord.css">
+</head>
+<body>
+  
+  <a href="teacher_home.html" class="text-blue-700 hover:underline mb-2 block">&larr; Back to Home</a>
+  <h2>Class Record Grade Sheet</h2>
+  <div class="sheet-box">
+    <!-- Selection Step -->
+    <div id="class-selection">
+      <label class="block mb-2"><b>Select Class:</b></label>
+      <select id="class-select" class="mb-4 p-2 border rounded w-full max-w-xs">
+        <option value="">-- Choose Class --</option>
+        <option value="grade-1">Grade 1</option>
+        <option value="grade-2">Grade 2</option>
+      </select>
+      <label class="block mb-2"><b>Select Subject:</b></label>
+      <select id="subject-select" class="mb-4 p-2 border rounded w-full max-w-xs">
+        <option value="">-- Choose Subject --</option>
+        <option value="math">Math</option>
+        <option value="english">English</option>
+      </select>
+      <button id="start-record-btn" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600">Start Recording</button>
+    </div>
+    <!-- Grade Sheet, hidden until class/subject chosen -->
+    <div id="grade-sheet-section" style="display:none;">
+      <div class="mb-4">
+        <span id="sheet-classinfo" class="block font-semibold text-lg"></span>
+        <button id="change-class-btn" class="text-sm text-blue-700 hover:underline">Change class/subject</button>
+      </div>
+      <table id="gradeSheet">
+        <thead>
+          <tr>
+            <th rowspan="2" class="left-head">No.</th>
+            <th rowspan="2" class="student-name-head">Student Name</th>
+            <th colspan="13" class="ww-header">Written Works (40%)</th>
+            <th colspan="13" class="pt-header">Performance Task (40%)</th>
+            <th colspan="3" class="qa-header">Quarterly Assessment (20%)</th>
+            <th rowspan="2">Initial Grade</th>
+            <th rowspan="2">Quarterly Grade</th>
+          </tr>
+          <tr>
+            <th colspan="10">Scores</th>
+            <th>Total</th>
+            <th>PS</th>
+            <th>WS</th>
+            <th colspan="10">Scores</th>
+            <th>Total</th>
+            <th>PS</th>
+            <th>WS</th>
+            <th>Score</th>
+            <th>PS</th>
+            <th>WS</th>
+          </tr>
+          <tr id="highestRow">
+            <td colspan="2" style="font-weight:bold; background:#e7f0fd;">Highest Possible Score</td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td><input type="number" min="0" class="ww-hps"></td>
+            <td id="ww-total-hps" class="computed"></td>
+            <td id="ww-ps-hps" class="computed">100.00</td>
+            <td id="ww-ws-hps" class="computed">40%</td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td><input type="number" min="0" class="pt-hps"></td>
+            <td id="pt-total-hps" class="computed"></td>
+            <td id="pt-ps-hps" class="computed">100.00</td>
+            <td id="pt-ws-hps" class="computed">40%</td>
+            <td><input type="number" min="0" class="qa-hps"></td>
+            <td id="qa-ps-hps" class="computed">100.00</td>
+            <td id="qa-ws-hps" class="computed">20%</td>
+            <td class="computed"></td>
+            <td class="computed"></td>
+          </tr>
+        </thead>
+        <tbody id="sheetBody">
+          <!-- Student rows inserted here by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="teacher_classrecord.js"></script>
+</body>
+</html>

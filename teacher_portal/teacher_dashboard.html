@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" />
+    <link rel="stylesheet" href="teacher_dashboard.css" />
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar w-1/5 bg-blue-900 text-white p-5 flex flex-col justify-between transition-all duration-300 relative">
+            <div>
+                <button id="sidebar-toggle"
+                    class="sidebar-toggle absolute -right-3 top-1/2 transform -translate-y-1/2 bg-blue-900 border-2 border-blue-700 rounded-full w-7 h-7 flex items-center justify-center focus:outline-none z-20"
+                    aria-label="Toggle sidebar"
+                    type="button"
+                >
+                    <svg id="arrow-icon" class="w-4 h-4 text-white transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+                <div class="flex items-center mb-5">
+                    <h2 class="text-xl font-bold">Name of the School</h2>
+                </div>
+                <ul class="space-y-2">
+                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="home-tab">HOME</li>
+                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="class-tab">CLASS</li>
+                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="class-record-tab">CLASS RECORD</li>
+                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="announcement-tab">ANNOUNCEMENT</li>
+                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="account-tab">ACCOUNT</li>
+                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="landing-tab">LANDING</li>
+                </ul>
+            </div>
+            <div>
+                <div id="logout-container" class="mt-2" style="display:none;">
+                    <button id="logout-btn" class="w-full p-2 rounded bg-red-500 hover:bg-red-600 mt-2 text-white">Log out</button>
+                </div>
+            </div>
+        </div>
+        <!-- Main Content -->
+        <div id="main-content" class="main-content w-4/5 p-5 overflow-y-auto transition-all duration-300 relative">
+            <!-- HOME Section (default) -->
+            <div class="section" id="home">
+                <div class="flex flex-col items-center justify-center">
+                    <!-- Avatar + Info -->
+                    <div class="flex items-center space-x-6 bg-white p-4 md:p-8 rounded-lg shadow mb-8 w-full max-w-xl md:max-w-2xl">
+                        <img src="https://ui-avatars.com/api/?name=Fiona+L+Santos&background=4F46E5&color=fff&size=80"
+                            alt="Avatar" class="w-20 h-20 md:w-28 md:h-28 rounded-full border-4 border-blue-400 shadow" />
+                        <div>
+                            <div class="text-lg md:text-2xl font-bold mb-1">Jed Lapin Sanchez</div>
+                            <div class="text-gray-500 text-sm md:text-base mb-1">Age: <span class="font-semibold">32</span></div>
+                            <div class="text-gray-500 text-sm md:text-base mb-1">Teacher ID: <span class="font-mono">TCH-2024-0010</span></div>
+                            <div class="text-blue-700 font-semibold text-sm md:text-base">Major: Mathematics</div>
+                        </div>
+                    </div>
+                    <!-- marie -->
+                    <div class="w-full max-w-2xl md:max-w-3xl bg-white p-4 md:p-8 rounded-lg shadow">
+                        <h3 class="text-base md:text-xl font-bold mb-4 text-blue-700 text-center">Weekly Schedule</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white border border-gray-200 rounded-lg text-xs md:text-sm shadow">
+                                <thead>
+                                    <tr>
+                                        <th class="px-2 py-1 border-b bg-blue-100">Day</th>
+                                        <th class="px-2 py-1 border-b bg-blue-100">Time</th>
+                                        <th class="px-2 py-1 border-b bg-blue-100">Subject/Section</th>
+                                        <th class="px-2 py-1 border-b bg-blue-100">Room</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-2 py-1 border-b">Monday</td>
+                                        <td class="px-2 py-1 border-b">8:00am - 10:00am</td>
+                                        <td class="px-2 py-1 border-b">Grade 7 - Math</td>
+                                        <td class="px-2 py-1 border-b">201</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-2 py-1 border-b">Monday</td>
+                                        <td class="px-2 py-1 border-b">10:30am - 12:00pm</td>
+                                        <td class="px-2 py-1 border-b">Grade 8 - Math</td>
+                                        <td class="px-2 py-1 border-b">202</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-2 py-1 border-b">Tuesday</td>
+                                        <td class="px-2 py-1 border-b">8:00am - 9:30am</td>
+                                        <td class="px-2 py-1 border-b">Grade 7 - Math</td>
+                                        <td class="px-2 py-1 border-b">201</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-2 py-1 border-b">Wednesday</td>
+                                        <td class="px-2 py-1 border-b">8:00am - 10:00am</td>
+                                        <td class="px-2 py-1 border-b">Grade 9 - Math</td>
+                                        <td class="px-2 py-1 border-b">203</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-2 py-1 border-b">Thursday</td>
+                                        <td class="px-2 py-1 border-b">1:00pm - 3:00pm</td>
+                                        <td class="px-2 py-1 border-b">Grade 10 - Math</td>
+                                        <td class="px-2 py-1 border-b">204</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-2 py-1 border-b">Friday</td>
+                                        <td class="px-2 py-1 border-b">8:00am - 9:00am</td>
+                                        <td class="px-2 py-1 border-b">Advisory Class</td>
+                                        <td class="px-2 py-1 border-b">Advisory Room</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- CLASS Section -->
+            <div class="section" id="class" style="display: none;">
+                <div class="text-center text-2xl text-blue-900 font-semibold">Class Page (Teacher Class Management)</div>
+            </div>
+            <!-- CLASS RECORD Section -->
+            <div class="section" id="class-record" style="display: none;">
+                <div class="text-center text-2xl text-blue-900 font-semibold">Class Record Page (Gradebook, etc)</div>
+            </div>
+            <!-- ANNOUNCEMENT Section -->
+            <div class="section" id="announcement" style="display: none;">
+                <h3 id="announcement-title" class="text-2xl font-bold mb-3">Announcements</h3>
+                <div class="mb-5">
+                    <input id="announcement-title-input" type="text" placeholder="Announcement Title" class="w-full p-2 border rounded mb-2" required />
+                    <select id="announcement-class-input" class="w-full p-2 border rounded mb-2" required>
+                        <option value="">Select Grade</option>
+                        <option value="Grade 1">Grade 1</option>
+                        <option value="Grade 2">Grade 2</option>
+                        <option value="Grade 3">Grade 3</option>
+                        <option value="Grade 4">Grade 4</option>
+                        <option value="Grade 5">Grade 5</option>
+                        <option value="Grade 6">Grade 6</option>
+                    </select>
+                    <textarea id="announcement-message-input" placeholder="Write your announcement message here..." class="w-full p-2 border rounded mb-2"></textarea>
+                    <div class="flex items-center space-x-2 mb-2">
+                        <label for="media-upload" class="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded">
+                            <svg class="w-5 h-5 mr-1 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 002.828 2.828l6.586-6.586M16 5v4a1 1 0 001 1h4"></path>
+                            </svg>
+                            <span>Upload Image/Video</span>
+                            <input type="file" id="media-upload" class="hidden" accept="image/*,video/mp4,video/webm" multiple>
+                        </label>
+                    </div>
+                    <div id="media-preview" class="flex space-x-2 mb-2"></div>
+                    <button id="post-announcement-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">
+                        Post
+                    </button>
+                </div>
+                <div id="announcement-list" class="space-y-3"></div>
+            </div>
+            <!-- ACCOUNT Section -->
+            <div class="section" id="account" style="display: none;">
+                <h3 id="account-title" class="text-2xl font-bold mb-3">Account</h3>
+                <div>
+                    <p>Your account information goes here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="teacher_dashboard.js"></script>
+</body>
+</html>

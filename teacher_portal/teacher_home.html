@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Teacher Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.css" />
+    <link rel="stylesheet" href="teacher_home.css" />
+</head>
+<body class="bg-white min-h-screen flex flex-row relative">
+
+    <!-- Hamburger Button to show sidebar (initially hidden) -->
+    <button id="show-sidebar-btn" class="fixed top-4 left-4 z-30 p-2 bg-blue-900 text-white rounded-lg shadow-lg hidden" aria-label="Show menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="w-1/5 bg-blue-900 text-white p-5 flex flex-col justify-between transition-all duration-300 relative min-h-screen">
+        <div>
+            <button id="sidebar-toggle"
+                class="absolute -right-3 top-1/2 transform -translate-y-1/2 bg-blue-900 border-2 border-blue-700 rounded-full w-7 h-7 flex items-center justify-center focus:outline-none z-20"
+                aria-label="Toggle sidebar" type="button">
+                <svg id="arrow-icon" class="w-4 h-4 text-white transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <div class="flex items-center mb-5">
+                <h2 class="text-xl font-bold">Name of the School</h2>
+            </div>
+            <ul class="space-y-2">
+                <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="home-tab">HOME</li>
+                <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="class-tab">CLASS</li>
+                <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="class-record-tab">CLASS RECORD</li>
+                <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="announcement-tab">ANNOUNCEMENT</li>
+            </ul>
+        </div>
+        <div>
+            <div id="logout-container" class="mt-2">
+                <button id="logout-btn" class="w-full p-2 rounded bg-red-500 hover:bg-red-600 mt-2 text-white">Log out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div id="main-content" class="w-4/5 p-5 overflow-y-auto transition-all duration-300 relative flex flex-col items-center justify-center min-h-screen">
+        <!-- HOME DASHBOARD (Always visible, centered) -->
+        <nav class="flex items-center bg-blue-100 px-6 py-4 border-b-4 border-blue-400 shadow-sm rounded-xl mb-6 w-full max-w-4xl mx-auto">
+            <button id="hamburger" class="mr-4 text-blue-500 hover:bg-blue-200 rounded p-1" aria-label="menu">
+               
+            </button>
+            <span class="text-3xl font-bold text-blue-700 tracking-wide select-none">HOME</span>
+        </nav>
+        <section class="border-4 border-blue-400 bg-blue-50 rounded-xl w-full max-w-3xl mb-6 p-6 flex flex-col items-center">
+            <h1 class="text-5xl font-bold text-blue-700 mb-2">Welcome</h1>
+            <p class="text-3xl text-blue-600 font-bold tracking-wide">
+                Great Morning, <span id="teacher-name" class="font-bold">Jed</span>
+                <span class="animate-blink">......</span>
+            </p>
+        </section>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl mx-auto">
+            <!-- Announcement Box -->
+            <section id="announcement-box" class="border-4 border-blue-400 bg-white rounded-xl p-4 min-h-[200px] flex flex-col">
+                <div class="text-xl font-bold text-blue-700 mb-2">Announcement</div>
+                <div id="announcement-content" class="flex-1 flex flex-col justify-center">
+                    <div class="text-gray-400 italic">No announcement</div>
+                </div>
+            </section>
+            <!-- Calendar + Badge Column -->
+            <div class="flex flex-col gap-6">
+                <!-- Calendar Box -->
+                <section class="border-4 border-blue-400 bg-white rounded-xl p-4 mb-2">
+                    <div class="text-xl font-bold text-blue-700 mb-2 border-b border-blue-200 pb-1 text-center uppercase">Calendar</div>
+                    <div id="calendar" class="w-full"></div>
+                </section>
+                <!-- Badge Box -->
+                <section class="border-4 border-blue-400 bg-white rounded-xl p-4 flex flex-col items-center">
+                    <div class="text-xl font-bold text-blue-700 mb-2 border-b border-blue-200 pb-1 text-center uppercase w-full">Badge</div>
+                    <div id="badge-stars" class="flex items-center gap-4 pt-2 w-full justify-center"></div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js"></script>
+    <script>
+        // Sidebar toggle logic
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebar-toggle');
+        const showBtn = document.getElementById('show-sidebar-btn');
+
+        function hideSidebar() {
+            sidebar.classList.add('hidden');
+            showBtn.classList.remove('hidden');
+        }
+
+        function showSidebar() {
+            sidebar.classList.remove('hidden');
+            showBtn.classList.add('hidden');
+        }
+
+        toggleBtn.onclick = () => {
+            hideSidebar();
+        };
+
+        showBtn.onclick = () => {
+            showSidebar();
+        };
+
+        // Navigation links
+        document.getElementById('home-tab').onclick = function() {
+            window.location.href = "teacher_home.html";
+        };
+        document.getElementById('class-tab').onclick = function() {
+            window.location.href = "teacher_class.html";
+        };
+        document.getElementById('class-record-tab').onclick = function() {
+            window.location.href = 'teacher_classrecord.html';
+        };
+        document.getElementById('announcement-tab').onclick = function() {
+            window.location.href = "teacher_dashboard.html#announcement";
+        };
+
+        // Logout
+        document.getElementById('logout-btn').onclick = function () {
+            alert('You have been logged out.');
+            window.location.reload();
+        };
+
+        // Set teacher name
+        document.getElementById('teacher-name').textContent = 'Jed';
+
+        // Announcement logic
+        function getAnnouncements() {
+            try {
+                return JSON.parse(localStorage.getItem("announcements") || "[]");
+            } catch (e) {
+                return [];
+            }
+        }
+        function renderLatestAnnouncement() {
+            const container = document.getElementById('announcement-content');
+            const announcements = getAnnouncements();
+            container.innerHTML = '';
+            if (!announcements.length) {
+                container.innerHTML = '<div class="text-gray-400 italic">No announcement</div>';
+                return;
+            }
+            const a = announcements[0];
+            if (a.title) {
+                const t = document.createElement('div');
+                t.className = "font-bold text-lg mb-1";
+                t.textContent = a.title;
+                container.appendChild(t);
+            }
+            if (a.grade) {
+                const c = document.createElement('div');
+                c.className = "italic text-blue-700 text-sm mb-2";
+                c.textContent = `For: ${a.grade}`;
+                container.appendChild(c);
+            }
+            if (a.message && a.message.trim()) {
+                const p = document.createElement('p');
+                p.className = "mb-2";
+                p.innerHTML = a.message.replace(/\n/g, '<br>');
+                container.appendChild(p);
+            }
+            if (a.images && a.images.length) {
+                const mediaDiv = document.createElement('div');
+                mediaDiv.className = "flex flex-wrap gap-2 mb-2";
+                a.images.forEach(m => {
+                    if (m.type.startsWith("image/")) {
+                        const img = document.createElement('img');
+                        img.src = m.dataUrl;
+                        img.alt = "announcement image";
+                        img.className = "max-h-32 max-w-xs rounded shadow";
+                        mediaDiv.appendChild(img);
+                    }
+                });
+                container.appendChild(mediaDiv);
+            }
+            const time = document.createElement('div');
+            time.className = "text-xs text-gray-400 mt-2";
+            time.textContent = a.time ? new Date(a.time).toLocaleString() : '';
+            container.appendChild(time);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderLatestAnnouncement();
+
+            // Initialize calendar
+            if (document.getElementById('calendar')) {
+                document.getElementById('calendar').innerHTML = '';
+                const calendarEl = document.getElementById('calendar');
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    height: 240,
+                });
+                calendar.render();
+            }
+
+            // Badge stars
+            const badgeDiv = document.getElementById("badge-stars");
+            if (badgeDiv) {
+                badgeDiv.innerHTML = '';
+                for (let i = 0; i < 5; i++) {
+                    let star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                    star.setAttribute("viewBox", "0 0 50 50");
+                    star.innerHTML = `
+                        <polygon points="25,5 31,19 46,19 34,29 39,44 25,35 11,44 16,29 4,19 19,19"
+                          fill="#fff" stroke="#2563eb" stroke-width="4"/>
+                        <polygon points="25,10 30,20 41,20 33,27 36,38 25,32 14,38 17,27 9,20 20,20"
+                          fill="#60a5fa" stroke="#2563eb" stroke-width="2"/>
+                    `;
+                    badgeDiv.appendChild(star);
+                }
+            }
+        });
+
+        // Live storage update
+        window.addEventListener('storage', function(e) {
+            if (e.key === "announcements") {
+                renderLatestAnnouncement();
+            }
+        });
+    </script>
+</body>
+</html>

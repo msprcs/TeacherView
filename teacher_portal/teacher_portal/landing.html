@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teacher Portal</title>
+  <link rel="stylesheet" href="landing.css" />
+  <script src="landing.js" defer></script>
+</head>
+<body>
+  <div class="main-bg">
+    <div class="container">
+      <header class="top-bar">
+        <div class="school-branding">
+         <img src="/teacher_portal/teacher_portal/imag/image.png" alt="imag" class="school-logo">
+          <span class="school-name">
+            EASTERN PANGASINAN CHRISTIAN LEARNING CENTER INC
+          </span>
+        </div>
+        <div class="profile">
+          <span class="avatar">👩‍🏫</span>
+          <span class="profile-name">Jeddie</span>
+          <span class="profile-role">Teacher</span>
+        </div>
+      </header>
+      <div class="welcome-card">
+        <div class="welcome-text">
+          <h2>Great Morning, Jeddie!</h2>
+          <p>Have a nice day</p>
+        </div>
+        <div class="welcome-graphic">🎓</div>
+      </div>
+      <!-- Features Grid Start -->
+      <div class="features-grid">
+        <div class="feature-card" onclick="navigateTo('home')">
+          <div class="icon">🏠</div>
+          <div class="label">Home</div>
+        </div>
+        <div class="feature-card" onclick="navigateTo('class')">
+          <div class="icon">📚</div>
+          <div class="label">Class</div>
+        </div>
+        <div class="feature-card" onclick="navigateTo('record')">
+          <div class="icon">📊</div>
+          <div class="label">Class Record</div>
+        </div>
+        <div class="feature-card" onclick="navigateTo('announcement')">
+          <div class="icon">📣</div>
+          <div class="label">Announcement</div>
+        </div>
+        <div class="feature-card" onclick="navigateTo('account')">
+          <div class="icon">👤</div>
+          <div class="label">Account</div>
+        </div>
+      </div>
+      <!-- Features Grid End -->
+      <div class="info-row">
+        <div class="info-card">
+          <h3>Info</h3>
+          <p>Latest system updates and reminders.</p>
+        </div>
+        <div class="info-card">
+          <h3>Queues</h3>
+          <p>Check your pending tasks and student requests.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add landing.js code for navigation -->
+  <script>
+    function navigateTo(tab) {
+      // Map the landing feature to the dashboard section name if needed.
+      // For example, "record" on landing maps to "class-record" in dashboard.
+      let section = tab;
+      if (section === 'record') section = 'class-record';
+      localStorage.setItem('dashboardTarget', section);
+      window.location.href = 'teacher_dashboard.html'; // Adjust path as needed if your file structure is different
+    }
+  </script>
+</body>
+</html>

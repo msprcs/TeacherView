@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Teacher Merit Wall & Classroom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="teacher_class.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.css" />
+</head>
+<body>
+  <div class="section" id="user-classes-section">
+    <button id="back-to-dashboard-btn" class="back-btn">&larr; Back to Dashboard</button>
+    <h1 class="main-head">Your Assigned Classes & Subjects</h1>
+    <ul class="pair-list" id="assigned-list"></ul>
+  </div>
+  <div class="section" id="students-section" style="display:none;">
+    <button id="students-back-btn" class="back-btn">&larr; Back</button>
+    <h2 id="students-title"></h2>
+    <ul class="student-list" id="student-list"></ul>
+  </div>
+  <!-- Merit Wall Section -->
+  <div id="merit-wall-section" style="display:none;">
+    <div class="merit-wall-container">
+      <button id="merit-wall-back-btn" class="back-btn">&larr; Back</button>
+      <h1 class="merit-title">Merit Wall</h1>
+      <div id="merit-wall-student" class="merit-wall-student"></div>
+      <div class="wall-flex">
+        <div id="merit-wall" class="merit-part">
+          <h2>Merits</h2>
+          <div class="wall-row">
+            <div id="star-row" class="grid"></div>
+            <div class="side-info">
+              <span class="label">Points:</span>
+              <span id="points-value">0</span>
+            </div>
+          </div>
+          <div class="button-row">
+            <button onclick="addMeritShard()">Add Merit Shard</button>
+            <button onclick="removeMeritShard()">Remove Merit Shard</button>
+          </div>
+        </div>
+        <div id="demerit-wall" class="merit-part">
+          <h2>Demerits</h2>
+          <div class="wall-row">
+            <div id="square-row" class="grid"></div>
+            <div class="side-info">
+              <span class="label">Demerits:</span>
+              <span id="demerits-value">0</span>
+            </div>
+          </div>
+          <div class="button-row">
+            <button onclick="addDemeritPart()">Add Demerit Part</button>
+            <button onclick="removeDemeritPart()">Remove Demerit Part</button>
+          </div>
+        </div>
+      </div>
+      <div class="total-row global-total">
+        <strong>Total Points:</strong>
+        <span id="total-points-global">0</span>
+      </div>
+    </div>
+  </div>
+  <!-- Calendar Section -->
+  <div id="calendar-section" style="display:none;">
+    <button id="calendar-back-btn" class="back-btn">&larr; Back</button>
+    <h2 id="calendar-title">Attendance Calendar</h2>
+    <div id="calendar-student-name"></div>
+    <div id="calendar" class="calendar-container"></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js"></script>
+  <script src="teacher_class.js"></script>
+</body>
+</html>

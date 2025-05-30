@@ -1,0 +1,8 @@
+/* teacher_home.css */
+#sidebar {
+  transition: transform 0.3s ease;
+}
+.hidden {
+  display: none;
+}
+/* Optional: add a sliding effect instead of display none by toggling translate-x classes if desired */
