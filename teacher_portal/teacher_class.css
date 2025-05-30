@@ -1,17 +1,17 @@
 body {
-  background: #edeaff;
+  background: #e7f0fd;
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
 .sidebar-gradient {
-  background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+  background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
 }
 .sidebar {
   min-width: 230px;
   max-width: 260px;
   border-radius: 32px;
-  box-shadow: 6px 0 32px 0 rgba(124,58,237,0.10);
+  box-shadow: 6px 0 32px 0 rgba(37,99,235,0.12);
   margin: 24px 0 24px 24px;
   height: calc(100vh - 48px);
   display: flex;
@@ -22,24 +22,27 @@ body {
   left: 0;
   top: 0;
   z-index: 10;
-  padding: 0 0 0 0;
+  padding: 0;
 }
 .sidebar-avatar {
-  border: 5px solid #f1eaff;
-  box-shadow: 0 2px 12px 0 rgba(124,58,237,0.10);
+  border: 5px solid #e0eaff;
+  box-shadow: 0 2px 12px 0 rgba(37,99,235,0.10);
   border-radius: 24px;
 }
 .sidebar-menu {
-  transition: background 0.2s, padding-left 0.3s, color 0.2s;
+  transition: background 0.2s, color 0.2s;
   cursor: pointer;
   padding-left: 1.25rem;
-  border-radius: 16px;
+  padding-right: 1.25rem;
+  border-radius: 2rem !important;
+  margin-bottom: 0.5rem;
+  background: transparent;
   font-weight: 500;
+  font-size: 1.06em;
+  outline: none;
+  min-height: 44px;
   display: flex;
   align-items: center;
-  margin-bottom: 2px;
-  color: #edeaff;
-  margin-right: 8px;
 }
 .sidebar-menu .icon {
   margin-right: 1rem;
@@ -48,21 +51,35 @@ body {
   display: inline-block;
   vertical-align: middle;
 }
-.sidebar-menu.sidebar-active, .sidebar-menu:hover {
-  background: linear-gradient(90deg, #7c3aed 70%, #a78bfa 100%);
-  color: #fff;
+/* OVAL (pill) buttons for sidebar */
+.sidebar-menu {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  border-radius: 2rem !important;
+}
+/* Active and hover states: darker blue */
+.sidebar-active,
+.sidebar-menu:focus,
+.sidebar-menu:hover {
+  background: linear-gradient(90deg, #2563eb 70%, #60a5fa 100%);
+  color: #fff !important;
   font-weight: bold;
-  padding-left: 2rem;
+}
+.sidebar-active .icon,
+.sidebar-menu:focus .icon,
+.sidebar-menu:hover .icon {
+  color: #fff;
 }
 .sidebar-logout {
-  color: #a78bfa;
-  background: #edeaff;
+  color: #2563eb;
+  background: #e0eaff;
   font-weight: bold;
-  border-radius: 18px;
+  border-radius: 2rem;
   transition: background 0.2s, color 0.2s;
 }
 .sidebar-logout:hover {
-  background: #f87171;
+  background: #2563eb;
   color: #fff;
 }
 @media (max-width: 900px) {
@@ -80,6 +97,7 @@ body {
   .sidebar-menu {
     justify-content: center;
     padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 }
 @media (max-width: 900px) {
@@ -91,6 +109,259 @@ main {
   margin-left: 270px;
   width: 100%;
   transition: margin-left 0.3s;
+}
+.section, .merit-wall-container {
+  max-width: 700px;
+  margin: 2em auto 0 auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px #2563eb18;
+  padding: 30px 24px 24px 24px;
+  position: relative;
+}
+.merit-wall-container {
+  max-width: 900px;
+}
+.main-head {
+  text-align: center;
+  color: #2563eb;
+  font-size: 2.1em;
+  margin-bottom: 28px;
+  letter-spacing: 0.01em;
+  font-weight: bold;
+}
+.pair-list, .student-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.pair-list li, .student-list li {
+  margin-bottom: 1rem;
+  background: #f2f6fc;
+  border-radius: 6px;
+  padding: 1rem 1.2rem;
+  font-size: 1.08rem;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 2px #2563eb07;
+}
+.pair-list li .class {
+  font-weight: bold;
+  margin-right: 0.5em;
+  color: #2563eb;
+}
+.pair-list li .subject {
+  color: #2d3748;
+  margin-left: 0.1em;
+}
+.empty {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+}
+.student-list li {
+  justify-content: space-between;
+}
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 1.1em;
+}
+.back-btn {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  padding: 0.48em 1.1em;
+  background: #e2e8f0;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  color: #2563eb;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 1px 4px #2563eb0d;
+}
+.back-btn:hover {
+  background: #2563eb;
+  color: #fff;
+}
+.upload-btn {
+  padding: 0.5em 1.5em;
+  font-size: 1em;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+  box-shadow: 0 2px 8px #2563eb14;
+  transition: background 0.18s;
+}
+.upload-btn:hover {
+  background: #1749b3;
+}
+select.action-dropdown {
+  font-size: 1em;
+  padding: 0.25em 0.5em;
+  border-radius: 4px;
+  border: 1px solid #bfcbe2;
+  background: #fff;
+}
+.merit-title {
+  text-align: center;
+  color: #2563eb;
+  margin-bottom: 0.2em;
+}
+.merit-wall-student {
+  text-align: center;
+  font-size: 1.15em;
+  margin-bottom: 1.2em;
+  color: #1749b3;
+  font-weight: 500;
+}
+.wall-flex {
+  display: flex;
+  gap: 2.5em;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.merit-part {
+  background: #f2f7fd;
+  border-radius: 13px;
+  box-shadow: 0 1px 6px #2563eb14;
+  padding: 1.2em 1.5em 1.1em 1.5em;
+  min-width: 230px;
+  max-width: 320px;
+  flex: 1 1 230px;
+}
+.wall-row {
+  display: flex;
+  align-items: center;
+  gap: 1.3em;
+  margin-bottom: 1em;
+}
+.grid {
+  display: flex;
+  gap: 0.3em;
+}
+.side-info {
+  margin-left: auto;
+  font-size: 1.02em;
+  text-align: right;
+}
+.label {
+  color: #2563eb;
+  font-weight: bold;
+}
+.button-row {
+  display: flex;
+  gap: 0.8em;
+  margin-bottom: 0.5em;
+  justify-content: center;
+}
+.button-row button {
+  padding: 0.5em 1.2em;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1em;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.button-row button:hover {
+  background: #1749b3;
+}
+.total-row {
+  margin: 2.5em auto 0 auto;
+  text-align: center;
+  font-size: 1.25em;
+  color: #1749b3;
+  background: #f1f6fd;
+  padding: 0.8em 0;
+  border-radius: 10px;
+  max-width: 420px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px #2563eb0d;
+}
+.star, .square {
+  width: 38px;
+  height: 38px;
+  display: inline-block;
+}
+.star path {
+  stroke: #FFD700;
+  stroke-width: 1.2;
+  transition: fill 0.2s;
+}
+.square rect[fill="#eee"] {
+  stroke: #e53e3e44;
+  stroke-width: 0.5;
+}
+.fc-daygrid-day.present { background: #b2f5b2 !important; }
+.fc-daygrid-day.absent { background: #f8bbbb !important; }
+@media (max-width: 1150px) {
+  .wall-flex { flex-direction: column; align-items: center; }
+}
+@media (max-width: 700px) {
+  .section, .merit-wall-container { max-width: 99vw; padding: 10px 2vw 25px 2vw; }
+  .wall-flex { gap: 1.2em; }
+  .merit-part { min-width: 0; max-width: 99vw; }
+}
+@media (max-width: 500px) {
+  .section, .merit-wall-container { padding: 4px 0.5vw 18px 0.5vw; }
+  .main-head { font-size: 1.3em; }
+}
+/* Calendar Container */
+.calendar-container, #calendar {
+  width: 100%;
+  max-width: 600px;
+  min-width: 320px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 8px 6px;
+  box-sizing: border-box;
+}
+.fc-toolbar {
+  font-size: 1em;
+  padding: 0.2em 0.3em;
+}
+.fc .fc-daygrid-day-frame {
+  padding: 2px 0 !important;
+}
+#calendar-title {
+  margin-bottom: 0.4em;
+  color: #2563eb;
+  text-align: center;
+}
+#calendar-student-name {
+  font-size: 1.12em;
+  margin-bottom: 0.9em;
+  text-align: center;
+  color: #1749b3;
+}
+#attendance-popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 2000;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 18px #2563eb33;
+  padding: 2em 1.5em 1.2em 1.5em;
+  min-width: 220px;
+  max-width: 90vw;
+  text-align: center;
+}
+#attendance-popup button {
+  margin: 0.4em 0.2em;
+}
 }
 .section, .merit-wall-container {
   max-width: 700px;

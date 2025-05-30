@@ -6,20 +6,19 @@
   <title>Teacher Home</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.css" />
-  <link rel="stylesheet" href="teacher_home.css" />
   <style>
     body {
-      background: #edeaff;
+      background: #e0f2fe !important;
       font-family: 'Inter', sans-serif;
     }
     .sidebar-gradient {
-      background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+      background: linear-gradient(180deg, #38bdf8 0%, #2563eb 100%);
     }
     .sidebar {
       min-width: 230px;
       max-width: 260px;
       border-radius: 32px;
-      box-shadow: 6px 0 32px 0 rgba(124,58,237,0.10);
+      box-shadow: 6px 0 32px 0 rgba(37,99,235,0.10);
       margin: 24px;
       height: calc(100vh - 48px);
       display: flex;
@@ -27,20 +26,22 @@
       justify-content: space-between;
     }
     .sidebar-avatar {
-      border: 5px solid #f1eaff;
-      box-shadow: 0 2px 12px 0 rgba(124,58,237,0.10);
+      border: 5px solid #e0f2fe;
+      box-shadow: 0 2px 12px 0 rgba(37,99,235,0.10);
       border-radius: 24px;
     }
     .sidebar-menu {
       transition: background 0.2s, padding-left 0.3s, color 0.2s;
       cursor: pointer;
       padding-left: 1.25rem;
-      border-radius: 16px;
+      border-radius: 9999px;
       font-weight: 500;
       display: flex;
       align-items: center;
       margin-bottom: 2px;
-      color: #edeaff;
+      color: #e0f2fe;
+      background: transparent;
+      min-height: 48px;
     }
     .sidebar-menu .icon {
       margin-right: 1rem;
@@ -49,29 +50,22 @@
       display: inline-block;
       vertical-align: middle;
     }
-    .sidebar-menu.sidebar-active, .sidebar-menu:hover {
-      background: linear-gradient(90deg, #7c3aed 70%, #a78bfa 100%);
+    .sidebar-menu.sidebar-active, .sidebar-menu:active, .sidebar-menu:focus, .sidebar-menu:hover {
+      background: linear-gradient(90deg, #2563eb 70%, #38bdf8 100%);
       color: #fff;
       font-weight: bold;
       padding-left: 2rem;
     }
     .sidebar-logout {
-      color: #a78bfa;
-      background: #edeaff;
+      color: #38bdf8;
+      background: #e0f2fe;
       font-weight: bold;
-      border-radius: 18px;
+      border-radius: 9999px;
       transition: background 0.2s, color 0.2s;
     }
     .sidebar-logout:hover {
-      background: #f87171;
+      background: #2563eb;
       color: #fff;
-    }
-    .animate-blink {
-      animation: blink 1.2s steps(1, end) infinite;
-    }
-    @keyframes blink {
-      0%,100% { opacity: 1; }
-      50% { opacity: 0; }
     }
     /* Responsive adjustments */
     @media (max-width: 900px) {
@@ -90,6 +84,43 @@
         justify-content: center;
         padding-left: 0.5rem;
       }
+    }
+
+    /* Oval Announcement & Home Styles */
+    .oval-box {
+      border-radius: 9999px;
+      background: linear-gradient(90deg, #38bdf8 70%, #2563eb 100%);
+      color: #fff;
+      padding: 0.5rem 1.5rem;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
+      text-align: center;
+      width: fit-content;
+      max-width: 100%;
+      word-break: break-word;
+    }
+    /* Center the welcome section content */
+    .welcome-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+    }
+    .animate-blink {
+      animation: blink 1.2s steps(1, end) infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    /* Announcement adjustments */
+    #announcement-box {
+      background: linear-gradient(135deg, #bae6fd 0%, #e0f2fe 100%);
+      border-radius: 2rem;
     }
   </style>
 </head>
@@ -155,17 +186,17 @@
   <main id="main-content" class="flex-1 flex flex-col items-center justify-center p-8">
     <div class="flex flex-col items-center justify-center w-full">
       <!-- HOME DASHBOARD -->
-      <section class="border-4 border-violet-300 bg-violet-50 rounded-3xl w-full max-w-3xl mb-6 p-8 flex flex-col items-center shadow-xl">
-        <h1 class="text-5xl font-bold text-violet-700 mb-2">Welcome</h1>
-        <p class="text-3xl text-violet-600 font-bold tracking-wide">
-          Great Morning, <span id="teacher-name" class="font-bold">Jed</span>
-          <span class="animate-blink">......</span>
-        </p>
+      <section class="welcome-section border-4 border-blue-300 bg-blue-50 rounded-3xl w-full max-w-3xl mb-6 p-8 flex flex-col items-center shadow-xl">
+        <h1 class="text-5xl font-bold text-blue-700 mb-2">Welcome</h1>
+        <div class="text-3xl text-blue-600 font-bold tracking-wide flex flex-col items-center">
+          <span class="oval-box mb-2">Great Morning, <span id="teacher-name" class="font-bold">Jed</span></span>
+          <span class="animate-blink text-blue-700 font-bold text-2xl">......</span>
+        </div>
       </section>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mx-auto">
         <!-- Announcement Box -->
-        <section id="announcement-box" class="border-4 border-violet-300 bg-white/90 rounded-2xl p-6 min-h-[230px] flex flex-col shadow-lg">
-          <div class="text-xl font-bold text-violet-700 mb-3">Announcement</div>
+        <section id="announcement-box" class="border-4 border-blue-300 bg-white/90 rounded-2xl p-6 min-h-[230px] flex flex-col shadow-lg">
+          <div class="text-xl font-bold text-blue-700 mb-3">Announcement</div>
           <div id="announcement-content" class="flex-1 flex flex-col justify-center">
             <div class="text-gray-400 italic">No announcement</div>
           </div>
@@ -173,13 +204,13 @@
         <!-- Calendar + Badge Column -->
         <div class="flex flex-col gap-8">
           <!-- Calendar Box -->
-          <section class="border-4 border-violet-300 bg-white/90 rounded-2xl p-6 mb-3 shadow-lg">
-            <div class="text-xl font-bold text-violet-700 mb-2 border-b border-violet-200 pb-1 text-center uppercase">Calendar</div>
+          <section class="border-4 border-blue-300 bg-white/90 rounded-2xl p-6 mb-3 shadow-lg">
+            <div class="text-xl font-bold text-blue-700 mb-2 border-b border-blue-200 pb-1 text-center uppercase">Calendar</div>
             <div id="calendar" class="w-full"></div>
           </section>
           <!-- Badge Box -->
-          <section class="border-4 border-violet-300 bg-white/90 rounded-2xl p-6 flex flex-col items-center shadow-lg">
-            <div class="text-xl font-bold text-violet-700 mb-2 border-b border-violet-200 pb-1 text-center uppercase w-full">Badge</div>
+          <section class="border-4 border-blue-300 bg-white/90 rounded-2xl p-6 flex flex-col items-center shadow-lg">
+            <div class="text-xl font-bold text-blue-700 mb-2 border-b border-blue-200 pb-1 text-center uppercase w-full">Badge</div>
             <div id="badge-stars" class="flex items-center gap-4 pt-2 w-full justify-center"></div>
           </section>
         </div>
@@ -240,19 +271,19 @@
       const a = announcements[0];
       if (a.title) {
         const t = document.createElement('div');
-        t.className = "font-bold text-lg mb-1";
+        t.className = "oval-box text-lg mb-1";
         t.textContent = a.title;
         container.appendChild(t);
       }
       if (a.grade) {
         const c = document.createElement('div');
-        c.className = "italic text-violet-700 text-sm mb-2";
+        c.className = "oval-box italic text-blue-700 text-sm mb-2";
         c.textContent = `For: ${a.grade}`;
         container.appendChild(c);
       }
       if (a.message && a.message.trim()) {
-        const p = document.createElement('p');
-        p.className = "mb-2";
+        const p = document.createElement('div');
+        p.className = "oval-box mb-2";
         p.innerHTML = a.message.replace(/\n/g, '<br>');
         container.appendChild(p);
       }
@@ -301,14 +332,15 @@
           star.setAttribute("height", "34");
           star.innerHTML = `
             <polygon points="25,5 31,19 46,19 34,29 39,44 25,35 11,44 16,29 4,19 19,19"
-              fill="#fff" stroke="#7c3aed" stroke-width="4"/>
+              fill="#fff" stroke="#2563eb" stroke-width="4"/>
             <polygon points="25,10 30,20 41,20 33,27 36,38 25,32 14,38 17,27 9,20 20,20"
-              fill="#a78bfa" stroke="#7c3aed" stroke-width="2"/>
+              fill="#38bdf8" stroke="#2563eb" stroke-width="2"/>
           `;
           badgeDiv.appendChild(star);
         }
       }
     });
+
     window.addEventListener('storage', function(e) {
       if (e.key === "announcements") {
         renderLatestAnnouncement();
