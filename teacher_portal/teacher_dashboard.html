@@ -1,164 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Teacher Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" />
-    <link rel="stylesheet" href="teacher_dashboard.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teacher Home</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.css" />
+  <link rel="stylesheet" href="teacher_home.css" />
+  <style>
+    body {
+      background: #edeaff;
+      font-family: 'Inter', sans-serif;
+    }
+    .sidebar-gradient {
+      background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+    }
+    .sidebar-icon {
+      background: rgba(255,255,255,0.11);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 2px 8px 0 rgba(124,58,237,0.09);
+    }
+    .sidebar-active, .sidebar-menu:hover {
+      background: linear-gradient(90deg, #7c3aed 70%, #a78bfa 100%);
+      color: #fff;
+      font-weight: bold;
+    }
+    .sidebar-menu {
+      transition: background 0.2s, padding-left 0.3s;
+      cursor: pointer;
+      padding-left: 1.25rem;
+    }
+    .sidebar-menu .icon {
+      margin-right: 1rem;
+    }
+    .sidebar-menu svg {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .sidebar {
+      min-width: 230px;
+      max-width: 260px;
+      border-radius: 32px;
+      box-shadow: 6px 0 32px 0 rgba(124,58,237,0.10);
+      margin: 24px;
+    }
+    .sidebar-avatar {
+      border: 5px solid #f1eaff;
+      box-shadow: 0 2px 12px 0 rgba(124,58,237,0.10);
+    }
+    .sidebar-logout {
+      color: #a78bfa;
+      background: #edeaff;
+      font-weight: bold;
+      border-radius: 18px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .sidebar-logout:hover {
+      background: #f87171;
+      color: #fff;
+    }
+    @media (max-width: 900px) {
+      .sidebar {
+        margin: 0;
+        border-radius: 0 32px 32px 0;
+      }
+    }
+    /* Blinking for "..." */
+    .animate-blink {
+      animation: blink 1.2s steps(1, end) infinite;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div id="sidebar" class="sidebar w-1/5 bg-blue-900 text-white p-5 flex flex-col justify-between transition-all duration-300 relative">
-            <div>
-                <button id="sidebar-toggle"
-                    class="sidebar-toggle absolute -right-3 top-1/2 transform -translate-y-1/2 bg-blue-900 border-2 border-blue-700 rounded-full w-7 h-7 flex items-center justify-center focus:outline-none z-20"
-                    aria-label="Toggle sidebar"
-                    type="button"
-                >
-                    <svg id="arrow-icon" class="w-4 h-4 text-white transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-                <div class="flex items-center mb-5">
-                    <h2 class="text-xl font-bold">Name of the School</h2>
-                </div>
-                <ul class="space-y-2">
-                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="home-tab">HOME</li>
-                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="class-tab">CLASS</li>
-                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="class-record-tab">CLASS RECORD</li>
-                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="announcement-tab">ANNOUNCEMENT</li>
-                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="account-tab">ACCOUNT</li>
-                    <li class="p-2 rounded hover:bg-blue-700 cursor-pointer" id="landing-tab">LANDING</li>
-                </ul>
-            </div>
-            <div>
-                <div id="logout-container" class="mt-2" style="display:none;">
-                    <button id="logout-btn" class="w-full p-2 rounded bg-red-500 hover:bg-red-600 mt-2 text-white">Log out</button>
-                </div>
-            </div>
+<body class="flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar sidebar-gradient text-white flex flex-col justify-between py-7 px-4 relative">
+    <div>
+      <div class="flex flex-col items-center mb-8 mt-3">
+        <div class="w-20 h-20 rounded-2xl bg-white/30 flex items-center justify-center mb-3 sidebar-avatar">
+          <img src="/teacher_portal/teacher_portal/imag/logo.png" alt="Avatar" class="w-18 h-18 rounded-2xl object-cover" />
         </div>
-        <!-- Main Content -->
-        <div id="main-content" class="main-content w-4/5 p-5 overflow-y-auto transition-all duration-300 relative">
-            <!-- HOME Section (default) -->
-            <div class="section" id="home">
-                <div class="flex flex-col items-center justify-center">
-                    <!-- Avatar + Info -->
-                    <div class="flex items-center space-x-6 bg-white p-4 md:p-8 rounded-lg shadow mb-8 w-full max-w-xl md:max-w-2xl">
-                        <img src="https://ui-avatars.com/api/?name=Fiona+L+Santos&background=4F46E5&color=fff&size=80"
-                            alt="Avatar" class="w-20 h-20 md:w-28 md:h-28 rounded-full border-4 border-blue-400 shadow" />
-                        <div>
-                            <div class="text-lg md:text-2xl font-bold mb-1">Jed Lapin Sanchez</div>
-                            <div class="text-gray-500 text-sm md:text-base mb-1">Age: <span class="font-semibold">32</span></div>
-                            <div class="text-gray-500 text-sm md:text-base mb-1">Teacher ID: <span class="font-mono">TCH-2024-0010</span></div>
-                            <div class="text-blue-700 font-semibold text-sm md:text-base">Major: Mathematics</div>
-                        </div>
-                    </div>
-                    <!-- marie -->
-                    <div class="w-full max-w-2xl md:max-w-3xl bg-white p-4 md:p-8 rounded-lg shadow">
-                        <h3 class="text-base md:text-xl font-bold mb-4 text-blue-700 text-center">Weekly Schedule</h3>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full bg-white border border-gray-200 rounded-lg text-xs md:text-sm shadow">
-                                <thead>
-                                    <tr>
-                                        <th class="px-2 py-1 border-b bg-blue-100">Day</th>
-                                        <th class="px-2 py-1 border-b bg-blue-100">Time</th>
-                                        <th class="px-2 py-1 border-b bg-blue-100">Subject/Section</th>
-                                        <th class="px-2 py-1 border-b bg-blue-100">Room</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="px-2 py-1 border-b">Monday</td>
-                                        <td class="px-2 py-1 border-b">8:00am - 10:00am</td>
-                                        <td class="px-2 py-1 border-b">Grade 7 - Math</td>
-                                        <td class="px-2 py-1 border-b">201</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-2 py-1 border-b">Monday</td>
-                                        <td class="px-2 py-1 border-b">10:30am - 12:00pm</td>
-                                        <td class="px-2 py-1 border-b">Grade 8 - Math</td>
-                                        <td class="px-2 py-1 border-b">202</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-2 py-1 border-b">Tuesday</td>
-                                        <td class="px-2 py-1 border-b">8:00am - 9:30am</td>
-                                        <td class="px-2 py-1 border-b">Grade 7 - Math</td>
-                                        <td class="px-2 py-1 border-b">201</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-2 py-1 border-b">Wednesday</td>
-                                        <td class="px-2 py-1 border-b">8:00am - 10:00am</td>
-                                        <td class="px-2 py-1 border-b">Grade 9 - Math</td>
-                                        <td class="px-2 py-1 border-b">203</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-2 py-1 border-b">Thursday</td>
-                                        <td class="px-2 py-1 border-b">1:00pm - 3:00pm</td>
-                                        <td class="px-2 py-1 border-b">Grade 10 - Math</td>
-                                        <td class="px-2 py-1 border-b">204</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-2 py-1 border-b">Friday</td>
-                                        <td class="px-2 py-1 border-b">8:00am - 9:00am</td>
-                                        <td class="px-2 py-1 border-b">Advisory Class</td>
-                                        <td class="px-2 py-1 border-b">Advisory Room</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- CLASS Section -->
-            <div class="section" id="class" style="display: none;">
-                <div class="text-center text-2xl text-blue-900 font-semibold">Class Page (Teacher Class Management)</div>
-            </div>
-            <!-- CLASS RECORD Section -->
-            <div class="section" id="class-record" style="display: none;">
-                <div class="text-center text-2xl text-blue-900 font-semibold">Class Record Page (Gradebook, etc)</div>
-            </div>
-            <!-- ANNOUNCEMENT Section -->
-            <div class="section" id="announcement" style="display: none;">
-                <h3 id="announcement-title" class="text-2xl font-bold mb-3">Announcements</h3>
-                <div class="mb-5">
-                    <input id="announcement-title-input" type="text" placeholder="Announcement Title" class="w-full p-2 border rounded mb-2" required />
-                    <select id="announcement-class-input" class="w-full p-2 border rounded mb-2" required>
-                        <option value="">Select Grade</option>
-                        <option value="Grade 1">Grade 1</option>
-                        <option value="Grade 2">Grade 2</option>
-                        <option value="Grade 3">Grade 3</option>
-                        <option value="Grade 4">Grade 4</option>
-                        <option value="Grade 5">Grade 5</option>
-                        <option value="Grade 6">Grade 6</option>
-                    </select>
-                    <textarea id="announcement-message-input" placeholder="Write your announcement message here..." class="w-full p-2 border rounded mb-2"></textarea>
-                    <div class="flex items-center space-x-2 mb-2">
-                        <label for="media-upload" class="cursor-pointer flex items-center bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded">
-                            <svg class="w-5 h-5 mr-1 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 002.828 2.828l6.586-6.586M16 5v4a1 1 0 001 1h4"></path>
-                            </svg>
-                            <span>Upload Image/Video</span>
-                            <input type="file" id="media-upload" class="hidden" accept="image/*,video/mp4,video/webm" multiple>
-                        </label>
-                    </div>
-                    <div id="media-preview" class="flex space-x-2 mb-2"></div>
-                    <button id="post-announcement-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">
-                        Post
-                    </button>
-                </div>
-                <div id="announcement-list" class="space-y-3"></div>
-            </div>
-            <!-- ACCOUNT Section -->
-            <div class="section" id="account" style="display: none;">
-                <h3 id="account-title" class="text-2xl font-bold mb-3">Account</h3>
-                <div>
-                    <p>Your account information goes here.</p>
-                </div>
-            </div>
-        </div>
+        <h2 class="text-lg font-bold tracking-wide text-white text-center mb-1">Name of the School</h2>
+        <div class="mt-1 text-sm text-violet-100 font-semibold">Teacher Portal</div>
+      </div>
+      <nav>
+        <ul class="space-y-1 mt-6">
+          <li class="sidebar-menu flex items-center py-3 px-3 rounded-2xl sidebar-active" id="home-tab">
+            <span class="icon mr-3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M3 9.5L12 3L21 9.5V20C21 20.55 20.55 21 20 21H4C3.45 21 3 20.55 3 20V9.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 21V12H15V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg></span> Home
+          </li>
+          <li class="sidebar-menu flex items-center py-3 px-3 rounded-2xl" id="class-tab">
+            <span class="icon mr-3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M16 3H8V7H16V3Z" stroke="currentColor" stroke-width="2"/>
+            </svg></span> Class
+          </li>
+          <li class="sidebar-menu flex items-center py-3 px-3 rounded-2xl" id="class-record-tab">
+            <span class="icon mr-3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M7 3V7" stroke="currentColor" stroke-width="2"/>
+              <path d="M17 3V7" stroke="currentColor" stroke-width="2"/>
+            </svg></span> Class Record
+          </li>
+          <li class="sidebar-menu flex items-center py-3 px-3 rounded-2xl" id="announcement-tab">
+            <span class="icon mr-3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M12 19C15.3137 19 18 16.3137 18 13C18 9.68629 15.3137 7 12 7C8.68629 7 6 9.68629 6 13C6 16.3137 8.68629 19 12 19Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 3V7" stroke="currentColor" stroke-width="2"/>
+            </svg></span> Announcement
+          </li>
+        </ul>
+      </nav>
     </div>
-    <script src="teacher_dashboard.js"></script>
+    <div class="mb-2">
+      <button id="logout-btn" class="sidebar-logout w-full py-2">Log out</button>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main id="main-content" class="flex-1 flex flex-col items-center justify-center p-8">
+    <!-- HOME DASHBOARD (shown by default) -->
+    <div id="home-dashboard" class="w-full">
+      <nav class="flex items-center bg-violet-100/90 px-8 py-4 border-b-4 border-violet-400 shadow rounded-2xl mb-7 w-full max-w-4xl mx-auto">
+        <span class="text-3xl font-bold text-violet-800 tracking-wider select-none">HOME</span>
+      </nav>
+      <section class="bg-white/90 border-4 border-violet-300 rounded-3xl w-full max-w-2xl mb-10 p-8 flex flex-col items-center shadow-xl">
+        <h1 class="text-4xl font-extrabold text-violet-700 mb-2 tracking-tight">Welcome</h1>
+        <p class="text-2xl text-violet-600 font-semibold tracking-wide">
+          Great Morning, <span id="teacher-name" class="font-extrabold">Jed</span>
+          <span class="animate-blink">...</span>
+        </p>
+      </section>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full max-w-4xl mx-auto">
+        <!-- Announcement Box -->
+        <section id="announcement-box" class="border-4 border-violet-300 bg-white/90 rounded-2xl p-6 min-h-[230px] flex flex-col shadow-lg">
+          <div class="text-xl font-bold text-violet-700 mb-3">Announcement</div>
+          <div id="announcement-content" class="flex-1 flex flex-col justify-center"></div>
+        </section>
+        <!-- Calendar + Badge Column -->
+        <div class="flex flex-col gap-8">
+          <!-- Calendar Box -->
+          <section class="border-4 border-violet-300 bg-white/90 rounded-2xl p-6 mb-3 shadow-lg">
+            <div class="text-xl font-bold text-violet-700 mb-2 border-b border-violet-200 pb-1 text-center uppercase">Calendar</div>
+            <div id="calendar" class="w-full"></div>
+          </section>
+          <!-- Badge Box -->
+          <section class="border-4 border-violet-300 bg-white/90 rounded-2xl p-6 flex flex-col items-center shadow-lg">
+            <div class="text-xl font-bold text-violet-700 mb-2 border-b border-violet-200 pb-1 text-center uppercase w-full">Badge</div>
+            <div id="badge-stars" class="flex items-center gap-4 pt-2 w-full justify-center"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js"></script>
+  <script>
+    // Sidebar navigation (with highlighting)
+    function setActiveSidebar(tabId) {
+      document.querySelectorAll('.sidebar-menu').forEach(el => el.classList.remove('sidebar-active'));
+      document.getElementById(tabId).classList.add('sidebar-active');
+    }
+    // Sidebar navigation redirects
+    document.getElementById('home-tab').onclick = function() {
+      setActiveSidebar('home-tab');
+      window.location.href = "teacher_home.html";
+    };
+    document.getElementById('class-tab').onclick = function() {
+      setActiveSidebar('class-tab');
+      window.location.href = "teacher_class.html";
+    };
+    document.getElementById('class-record-tab').onclick = function() {
+      setActiveSidebar('class-record-tab');
+      window.location.href = "teacher_classrecord.html";
+    };
+    document.getElementById('announcement-tab').onclick = function() {
+      setActiveSidebar('announcement-tab');
+      window.location.href = "teacher_dashboard.html#announcement";
+    };
+
+    // Logout
+    document.getElementById('logout-btn').onclick = function () {
+      alert('You have been logged out.');
+      window.location.reload();
+    };
+
+    // Set teacher name
+    document.getElementById('teacher-name').textContent = 'Jed';
+
+    // Announcement logic
+    function getAnnouncements() {
+      try {
+        return JSON.parse(localStorage.getItem("announcements") || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+    function renderLatestAnnouncement() {
+      const container = document.getElementById('announcement-content');
+      const announcements = getAnnouncements();
+      container.innerHTML = '';
+      if (!announcements.length) {
+        container.innerHTML = '<div class="text-gray-400 italic">No announcement</div>';
+        return;
+      }
+      const a = announcements[0];
+      if (a.title) {
+        const t = document.createElement('div');
+        t.className = "font-bold text-lg mb-1";
+        t.textContent = a.title;
+        container.appendChild(t);
+      }
+      if (a.grade) {
+        const c = document.createElement('div');
+        c.className = "italic text-violet-700 text-sm mb-2";
+        c.textContent = `For: ${a.grade}`;
+        container.appendChild(c);
+      }
+      if (a.message && a.message.trim()) {
+        const p = document.createElement('p');
+        p.className = "mb-2";
+        p.innerHTML = a.message.replace(/\n/g, '<br>');
+        container.appendChild(p);
+      }
+      if (a.images && a.images.length) {
+        const mediaDiv = document.createElement('div');
+        mediaDiv.className = "flex flex-wrap gap-2 mb-2";
+        a.images.forEach(m => {
+          if (m.type && m.type.startsWith("image/")) {
+            const img = document.createElement('img');
+            img.src = m.dataUrl;
+            img.alt = "announcement image";
+            img.className = "max-h-32 max-w-xs rounded shadow";
+            mediaDiv.appendChild(img);
+          }
+        });
+        container.appendChild(mediaDiv);
+      }
+      const time = document.createElement('div');
+      time.className = "text-xs text-gray-400 mt-2";
+      time.textContent = a.time ? new Date(a.time).toLocaleString() : '';
+      container.appendChild(time);
+    }
+
+    // On load
+    document.addEventListener('DOMContentLoaded', function() {
+      renderLatestAnnouncement();
+
+      // Initialize calendar
+      if (document.getElementById('calendar')) {
+        document.getElementById('calendar').innerHTML = '';
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          height: 240,
+        });
+        calendar.render();
+      }
+
+      // Badge stars
+      const badgeDiv = document.getElementById("badge-stars");
+      if (badgeDiv) {
+        badgeDiv.innerHTML = '';
+        for (let i = 0; i < 5; i++) {
+          let star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          star.setAttribute("viewBox", "0 0 50 50");
+          star.setAttribute("width", "34");
+          star.setAttribute("height", "34");
+          star.innerHTML = `
+            <polygon points="25,5 31,19 46,19 34,29 39,44 25,35 11,44 16,29 4,19 19,19"
+              fill="#fff" stroke="#7c3aed" stroke-width="4"/>
+            <polygon points="25,10 30,20 41,20 33,27 36,38 25,32 14,38 17,27 9,20 20,20"
+              fill="#a78bfa" stroke="#7c3aed" stroke-width="2"/>
+          `;
+          badgeDiv.appendChild(star);
+        }
+      }
+    });
+    window.addEventListener('storage', function(e) {
+      if (e.key === "announcements") {
+        renderLatestAnnouncement();
+      }
+    });
+  </script>
 </body>
 </html>

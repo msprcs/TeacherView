@@ -1,8 +1,16 @@
-/* teacher_home.css */
-#sidebar {
-  transition: transform 0.3s ease;
-}
 .hidden {
   display: none;
 }
-/* Optional: add a sliding effect instead of display none by toggling translate-x classes if desired */
+body {
+  font-family: 'Inter', sans-serif;
+}
+#announcement-box {
+  background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
+}
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

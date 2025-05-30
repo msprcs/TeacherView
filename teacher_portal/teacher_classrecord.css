@@ -1,93 +1,185 @@
 body {
-  font-family: Arial, sans-serif;
   background: #e7f0fd;
-  padding: 40px;
+  font-family: 'Inter', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #2b4d70;
+.sidebar-gradient {
+  background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
 }
-
+.sidebar {
+  min-width: 230px;
+  max-width: 260px;
+  border-radius: 32px;
+  box-shadow: 6px 0 32px 0 rgba(124,58,237,0.10);
+  margin: 24px 0 24px 24px;
+  height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #fff;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  padding: 0 0 0 0;
+}
+.sidebar-avatar {
+  border: 5px solid #f1eaff;
+  box-shadow: 0 2px 12px 0 rgba(124,58,237,0.10);
+  border-radius: 24px;
+}
+.sidebar-menu {
+  transition: background 0.2s, padding-left 0.3s, color 0.2s;
+  cursor: pointer;
+  padding-left: 1.25rem;
+  border-radius: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+  color: #edeaff;
+  margin-right: 8px;
+}
+.sidebar-menu .icon {
+  margin-right: 1rem;
+}
+.sidebar-menu svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+.sidebar-menu.sidebar-active, .sidebar-menu:hover {
+  background: linear-gradient(90deg, #7c3aed 70%, #a78bfa 100%);
+  color: #fff;
+  font-weight: bold;
+  padding-left: 2rem;
+}
+.sidebar-logout {
+  color: #a78bfa;
+  background: #edeaff;
+  font-weight: bold;
+  border-radius: 18px;
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar-logout:hover {
+  background: #f87171;
+  color: #fff;
+}
+@media (max-width: 900px) {
+  .sidebar {
+    margin: 0;
+    border-radius: 0 32px 32px 0;
+    min-width: 70px;
+    max-width: 85px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .sidebar-menu span:not(.icon) {
+    display: none;
+  }
+  .sidebar-menu {
+    justify-content: center;
+    padding-left: 0.5rem;
+  }
+}
+@media (max-width: 900px) {
+  main {
+    margin-left: 90px !important;
+  }
+}
+main {
+  margin-left: 295px;
+  width: calc(100vw - 295px);
+  transition: margin-left 0.3s;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
 .sheet-box {
-  margin: 0 auto;
+  margin: 2.5em auto 0 auto;
   background: #fafdff;
-  border-radius: 14px;
-  box-shadow: 0 4px 30px #8ab6f9;
-  padding: 36px 18px 24px 18px;
-  max-width: 98vw;
+  border-radius: 32px;
+  box-shadow: 0 12px 32px #a78bfa33, 0 1.5px 12px #7c3aed12;
+  padding: 48px 38px 36px 38px;
+  max-width: 1140px;
+  min-width: 760px;
+  width: 100%;
   overflow-x: auto;
   border: 2px solid #b3c8e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-/* Center the class selection form */
 #class-selection {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 320px;
-  padding: 40px 0 36px 0;
+  padding: 50px 0 36px 0;
+  width: 100%;
+  max-width: 520px;
+  background: #f4f7fe;
+  border-radius: 28px;
+  box-shadow: 0 1.5px 12px #a78bfa17;
+  margin-bottom: 32px;
 }
-
-/* Adjust size of select and button elements */
 #class-select,
 #subject-select {
   width: 320px;
-  max-width: 90vw;
-  min-width: 200px;
+  max-width: 85vw;
+  min-width: 180px;
   font-size: 1.07em;
   padding: 10px 12px;
   margin-bottom: 22px;
 }
-
 #class-selection label {
-  font-size: 1.08em;
+  font-size: 1.13em;
   margin-bottom: 6px;
   align-self: flex-start;
   width: 320px;
-  max-width: 90vw;
-  min-width: 200px;
+  max-width: 85vw;
+  min-width: 180px;
 }
-
 #start-record-btn {
   width: 320px;
-  max-width: 90vw;
-  font-size: 1.07em;
-  padding: 12px 0;
-  margin-top: 12px;
+  max-width: 85vw;
+  font-size: 1.13em;
+  padding: 14px 0;
+  margin-top: 16px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #7c3aed 60%, #a78bfa 100%);
+  box-shadow: 0 2px 8px #a78bfa22;
 }
-
-/* Responsive for smaller screens */
-@media (max-width: 500px) {
-  #class-select,
-  #subject-select,
-  #class-selection label,
-  #start-record-btn {
-    width: 97vw;
-    min-width: unset;
-    max-width: 100vw;
-    font-size: 1em;
-    padding: 8px 0;
-  }
-  #class-selection {
-    min-height: 220px;
-    padding: 15px 0 20px 0;
-  }
+#grade-sheet-section {
+  width: 100%;
 }
-
-/* ...rest of your styles unchanged... */
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+#sheet-classinfo {
+  font-size: 1.17em;
+  color: #7c3aed;
+}
+#change-class-btn {
+  margin-left: 1.4em;
+  font-size: 1em;
+}
 table {
   border-collapse: collapse;
   margin: 0 auto 20px auto;
-  font-size: 0.97em;
+  font-size: 1.07em;
   background: #fafdff;
-  min-width: 1200px;
+  min-width: 1180px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 14px #7c3aed14;
 }
 th, td {
   border: 1px solid #b3c8e6;
-  padding: 5px 8px;
+  padding: 7px 10px;
   text-align: center;
 }
 th {
@@ -98,18 +190,16 @@ th {
 .ww-header { background: #c6e2fa !important; }
 .pt-header { background: #e3f2fd !important; }
 .qa-header { background: #b7d8f9 !important; }
-
 .left-head {
   background: #dbeafe !important;
   min-width: 38px;
   width: 38px;
   max-width: 45px;
 }
-
 .student-name-head {
   background: #dbeafe !important;
   min-width: 175px;
-  width: 200px;
+  width: 210px;
   text-align: left !important;
   padding-left: 18px !important;
   color: #2b4d70;
@@ -126,11 +216,10 @@ tbody td:nth-child(2) input[type="text"] {
   font-weight: 500;
   width: 97%;
 }
-
 input[type="number"], input[type="text"] {
   width: 55px;
   padding: 2px 4px;
-  font-size: 0.97em;
+  font-size: 1em;
   border-radius: 2px;
   border: 1px solid #c3d5f4;
   background: #fafdff;
@@ -143,17 +232,18 @@ input[type="text"] {
 button {
   display: block;
   margin: 24px auto 0 auto;
-  padding: 8px 18px;
-  background: #4695e6;
+  padding: 10px 22px;
+  background: #7c3aed;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   font-size: 1em;
   cursor: pointer;
-  box-shadow: 0 2px 6px #6ea8fe33;
+  box-shadow: 0 2px 6px #a78bfa22;
+  transition: background 0.18s;
 }
 button:hover {
-  background: #3586d0;
+  background: #5531b6;
 }
 tfoot td, .computed {
   background: #eaf3fd;
@@ -166,6 +256,8 @@ tfoot td, .computed {
 @media (max-width: 1350px) {
   .sheet-box {
     padding: 8px 2vw 20px 2vw;
+    min-width: 0;
+    max-width: 99vw;
   }
   table {
     min-width: 900px;
@@ -174,5 +266,34 @@ tfoot td, .computed {
   .student-name-head, tbody td:nth-child(2) input[type="text"] {
     min-width: 90px;
     width: 110px;
+  }
+  #class-selection {
+    min-width: unset;
+    max-width: 99vw;
+  }
+}
+@media (max-width: 900px) {
+  main {
+    margin-left: 90px !important;
+    width: calc(100vw - 90px);
+  }
+  .sheet-box {
+    border-radius: 22px;
+    padding: 18px 4vw 16px 4vw;
+  }
+  #class-selection {
+    border-radius: 18px;
+    padding: 18px 2vw 16px 2vw;
+  }
+}
+@media (max-width: 650px) {
+  .sheet-box {
+    min-width: 0;
+    border-radius: 12px;
+    padding: 10px 0.5vw 10px 0.5vw;
+  }
+  table {
+    min-width: 680px;
+    font-size: 0.89em;
   }
 }

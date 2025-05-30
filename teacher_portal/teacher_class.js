@@ -1,3 +1,31 @@
+// Sidebar navigation (with highlighting)
+function setActiveSidebar(tabId) {
+  document.querySelectorAll('.sidebar-menu').forEach(el => el.classList.remove('sidebar-active'));
+  document.getElementById(tabId).classList.add('sidebar-active');
+}
+document.getElementById('home-tab').onclick = function() {
+  setActiveSidebar('home-tab');
+  window.location.href = "teacher_home.html";
+};
+document.getElementById('class-tab').onclick = function() {
+  setActiveSidebar('class-tab');
+  window.location.href = "teacher_class.html";
+};
+document.getElementById('class-record-tab').onclick = function() {
+  setActiveSidebar('class-record-tab');
+  window.location.href = "teacher_classrecord.html";
+};
+document.getElementById('announcement-tab').onclick = function() {
+  setActiveSidebar('announcement-tab');
+  window.location.href = "teacher_dashboard.html#announcement";
+};
+
+// Logout
+document.getElementById('logout-btn').onclick = function () {
+  alert('You have been logged out.');
+  window.location.reload();
+};
+
 // ========== Demo Data ==========
 const assignedClasses = [
   { class: "Grade 2", subject: "Science" },
@@ -316,7 +344,6 @@ function showAttendanceCalendar(studentName, className, subjectName) {
         borderColor: '#e53e3e'
       });
     }
-    // undefined: no event
   }
 
   let calendar = new window.FullCalendar.Calendar(calendarDiv, {

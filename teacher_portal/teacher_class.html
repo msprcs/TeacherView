@@ -4,69 +4,132 @@
   <meta charset="UTF-8">
   <title>Teacher Merit Wall & Classroom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="teacher_class.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"/>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.css" />
+  <link rel="stylesheet" href="teacher_class.css">
 </head>
-<body>
-  <div class="section" id="user-classes-section">
-    <button id="back-to-dashboard-btn" class="back-btn">&larr; Back to Dashboard</button>
-    <h1 class="main-head">Your Assigned Classes & Subjects</h1>
-    <ul class="pair-list" id="assigned-list"></ul>
-  </div>
-  <div class="section" id="students-section" style="display:none;">
-    <button id="students-back-btn" class="back-btn">&larr; Back</button>
-    <h2 id="students-title"></h2>
-    <ul class="student-list" id="student-list"></ul>
-  </div>
-  <!-- Merit Wall Section -->
-  <div id="merit-wall-section" style="display:none;">
-    <div class="merit-wall-container">
-      <button id="merit-wall-back-btn" class="back-btn">&larr; Back</button>
-      <h1 class="merit-title">Merit Wall</h1>
-      <div id="merit-wall-student" class="merit-wall-student"></div>
-      <div class="wall-flex">
-        <div id="merit-wall" class="merit-part">
-          <h2>Merits</h2>
-          <div class="wall-row">
-            <div id="star-row" class="grid"></div>
-            <div class="side-info">
-              <span class="label">Points:</span>
-              <span id="points-value">0</span>
-            </div>
-          </div>
-          <div class="button-row">
-            <button onclick="addMeritShard()">Add Merit Shard</button>
-            <button onclick="removeMeritShard()">Remove Merit Shard</button>
-          </div>
+<body class="flex min-h-screen bg-[#edeaff]">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar sidebar-gradient">
+    <div>
+      <div class="flex flex-col items-center mb-8 mt-3">
+        <div class="w-20 h-20 rounded-2xl bg-white/30 flex items-center justify-center mb-3 sidebar-avatar">
+          <img src="/teacher_portal/teacher_portal/imag/logo.png" alt="Avatar" class="w-18 h-18 rounded-2xl object-cover" />
         </div>
-        <div id="demerit-wall" class="merit-part">
-          <h2>Demerits</h2>
-          <div class="wall-row">
-            <div id="square-row" class="grid"></div>
-            <div class="side-info">
-              <span class="label">Demerits:</span>
-              <span id="demerits-value">0</span>
-            </div>
-          </div>
-          <div class="button-row">
-            <button onclick="addDemeritPart()">Add Demerit Part</button>
-            <button onclick="removeDemeritPart()">Remove Demerit Part</button>
-          </div>
-        </div>
+        <h2 class="text-lg font-bold tracking-wide text-white text-center mb-1">Name of the School</h2>
+        <div class="mt-1 text-sm text-violet-100 font-semibold">Teacher Portal</div>
       </div>
-      <div class="total-row global-total">
-        <strong>Total Points:</strong>
-        <span id="total-points-global">0</span>
+      <nav>
+        <ul class="mt-6">
+          <li class="sidebar-menu" id="home-tab">
+            <span class="icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M3 9.5L12 3L21 9.5V20C21 20.55 20.55 21 20 21H4C3.45 21 3 20.55 3 20V9.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 21V12H15V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span>Home</span>
+          </li>
+          <li class="sidebar-menu sidebar-active" id="class-tab">
+            <span class="icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M16 3H8V7H16V3Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            <span>Class</span>
+          </li>
+          <li class="sidebar-menu" id="class-record-tab">
+            <span class="icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M7 3V7" stroke="currentColor" stroke-width="2"/>
+                <path d="M17 3V7" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            <span>Class Record</span>
+          </li>
+          <li class="sidebar-menu" id="announcement-tab">
+            <span class="icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M12 19C15.3137 19 18 16.3137 18 13C18 9.68629 15.3137 7 12 7C8.68629 7 6 9.68629 6 13C6 16.3137 8.68629 19 12 19Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 3V7" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+            <span>Announcement</span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="mb-2 px-3">
+      <button id="logout-btn" class="sidebar-logout w-full py-2">Log out</button>
+    </div>
+  </aside>
+
+  <main id="main-content" class="flex-1">
+
+    <div class="section" id="user-classes-section">
+      <button id="back-to-dashboard-btn" class="back-btn">&larr; Back to Dashboard</button>
+      <h1 class="main-head">Your Assigned Classes & Subjects</h1>
+      <ul class="pair-list" id="assigned-list"></ul>
+    </div>
+    <div class="section" id="students-section" style="display:none;">
+      <button id="students-back-btn" class="back-btn">&larr; Back</button>
+      <h2 id="students-title"></h2>
+      <ul class="student-list" id="student-list"></ul>
+    </div>
+    <!-- Merit Wall Section -->
+    <div id="merit-wall-section" style="display:none;">
+      <div class="merit-wall-container">
+        <button id="merit-wall-back-btn" class="back-btn">&larr; Back</button>
+        <h1 class="merit-title">Merit Wall</h1>
+        <div id="merit-wall-student" class="merit-wall-student"></div>
+        <div class="wall-flex">
+          <div id="merit-wall" class="merit-part">
+            <h2>Merits</h2>
+            <div class="wall-row">
+              <div id="star-row" class="grid"></div>
+              <div class="side-info">
+                <span class="label">Points:</span>
+                <span id="points-value">0</span>
+              </div>
+            </div>
+            <div class="button-row">
+              <button onclick="addMeritShard()">Add Merit Shard</button>
+              <button onclick="removeMeritShard()">Remove Merit Shard</button>
+            </div>
+          </div>
+          <div id="demerit-wall" class="merit-part">
+            <h2>Demerits</h2>
+            <div class="wall-row">
+              <div id="square-row" class="grid"></div>
+              <div class="side-info">
+                <span class="label">Demerits:</span>
+                <span id="demerits-value">0</span>
+              </div>
+            </div>
+            <div class="button-row">
+              <button onclick="addDemeritPart()">Add Demerit Part</button>
+              <button onclick="removeDemeritPart()">Remove Demerit Part</button>
+            </div>
+          </div>
+        </div>
+        <div class="total-row global-total">
+          <strong>Total Points:</strong>
+          <span id="total-points-global">0</span>
+        </div>
       </div>
     </div>
-  </div>
-  <!-- Calendar Section -->
-  <div id="calendar-section" style="display:none;">
-    <button id="calendar-back-btn" class="back-btn">&larr; Back</button>
-    <h2 id="calendar-title">Attendance Calendar</h2>
-    <div id="calendar-student-name"></div>
-    <div id="calendar" class="calendar-container"></div>
-  </div>
+    <!-- Calendar Section -->
+    <div id="calendar-section" style="display:none;">
+      <button id="calendar-back-btn" class="back-btn">&larr; Back</button>
+      <h2 id="calendar-title">Attendance Calendar</h2>
+      <div id="calendar-student-name"></div>
+      <div id="calendar" class="calendar-container"></div>
+    </div>
+
+  </main>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js"></script>
   <script src="teacher_class.js"></script>
 </body>

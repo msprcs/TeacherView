@@ -1,10 +1,35 @@
-// Utility to get HPS (highest possible scores) for WW/PT/QA
+// Sidebar navigation (with highlighting)
+function setActiveSidebar(tabId) {
+  document.querySelectorAll('.sidebar-menu').forEach(el => el.classList.remove('sidebar-active'));
+  document.getElementById(tabId).classList.add('sidebar-active');
+}
+document.getElementById('home-tab').onclick = function() {
+  setActiveSidebar('home-tab');
+  window.location.href = "teacher_home.html";
+};
+document.getElementById('class-tab').onclick = function() {
+  setActiveSidebar('class-tab');
+  window.location.href = "teacher_class.html";
+};
+document.getElementById('class-record-tab').onclick = function() {
+  setActiveSidebar('class-record-tab');
+  window.location.href = "teacher_classrecord.html";
+};
+document.getElementById('announcement-tab').onclick = function() {
+  setActiveSidebar('announcement-tab');
+  window.location.href = "teacher_dashboard.html#announcement";
+};
+
+document.getElementById('logout-btn').onclick = function () {
+  alert('You have been logged out.');
+  window.location.reload();
+};
+
 function getHPS(type) {
   let selector = type === "ww" ? ".ww-hps" : (type === "pt" ? ".pt-hps" : ".qa-hps");
   return Array.from(document.querySelectorAll(selector)).map(x => Number(x.value) || 0);
 }
 
-// Add student row with empty scores
 function addStudentRow() {
   const tbody = document.getElementById('sheetBody');
   const rowCount = tbody.rows.length + 1;
@@ -30,7 +55,6 @@ function addStudentRow() {
   attachListeners(tr);
 }
 
-// Attach event listeners for all inputs in a student row
 function attachListeners(tr) {
   tr.querySelectorAll('input').forEach(input => {
     input.addEventListener('input', () => {
@@ -44,104 +68,59 @@ function attachListeners(tr) {
   });
 }
 
-// Transmutation table as array: [min, max, grade]
 const transmuteTable = [
-  [100, 100, 100],
-  [98.40, 99.99, 99],
-  [96.80, 98.39, 98],
-  [95.21, 96.79, 97],
-  [93.60, 95.19, 96],
-  [92.00, 93.59, 95],
-  [90.40, 91.99, 94],
-  [88.80, 90.39, 93],
-  [87.20, 88.79, 92],
-  [85.60, 87.19, 91],
-  [84.00, 85.59, 90],
-  [82.40, 83.99, 89],
-  [80.80, 82.39, 88],
-  [78.20, 80.79, 87],
-  [77.60, 79.19, 86],
-  [76.00, 77.59, 85],
-  [74.40, 75.99, 84],
-  [72.80, 74.39, 83],
-  [71.20, 72.79, 82],
-  [69.61, 71.19, 81],
-  [68.00, 69.59, 80],
-  [66.40, 67.99, 79],
-  [64.81, 66.39, 78],
-  [63.21, 64.79, 77],
-  [61.60, 63.19, 76],
-  [60.00, 61.59, 75],
-  [56.00, 59.99, 74],
-  [52.01, 55.99, 73],
-  [48.00, 51.99, 72],
-  [44.00, 47.99, 71],
-  [40.01, 43.99, 70],
-  [36.00, 39.99, 69],
-  [32.00, 35.99, 68],
-  [28.00, 31.99, 67],
-  [24.00, 27.99, 66],
-  [20.00, 23.99, 65],
-  [16.00, 19.99, 64],
-  [12.00, 15.99, 63],
-  [8.00, 11.99, 62],
-  [4.00, 7.99, 61],
+  [100, 100, 100],[98.40, 99.99, 99],[96.80, 98.39, 98],[95.21, 96.79, 97],[93.60, 95.19, 96],
+  [92.00, 93.59, 95],[90.40, 91.99, 94],[88.80, 90.39, 93],[87.20, 88.79, 92],[85.60, 87.19, 91],
+  [84.00, 85.59, 90],[82.40, 83.99, 89],[80.80, 82.39, 88],[78.20, 80.79, 87],[77.60, 79.19, 86],
+  [76.00, 77.59, 85],[74.40, 75.99, 84],[72.80, 74.39, 83],[71.20, 72.79, 82],[69.61, 71.19, 81],
+  [68.00, 69.59, 80],[66.40, 67.99, 79],[64.81, 66.39, 78],[63.21, 64.79, 77],[61.60, 63.19, 76],
+  [60.00, 61.59, 75],[56.00, 59.99, 74],[52.01, 55.99, 73],[48.00, 51.99, 72],[44.00, 47.99, 71],
+  [40.01, 43.99, 70],[36.00, 39.99, 69],[32.00, 35.99, 68],[28.00, 31.99, 67],[24.00, 27.99, 66],
+  [20.00, 23.99, 65],[16.00, 19.99, 64],[12.00, 15.99, 63],[8.00, 11.99, 62],[4.00, 7.99, 61],
   [0.00, 3.99, 60]
 ];
 
 function transmuteGrade(initial) {
   for (const [min, max, grade] of transmuteTable) {
-    if (initial >= min && initial <= max) {
-      return grade;
-    }
+    if (initial >= min && initial <= max) return grade;
   }
-  return 60; // fallback, should never hit due to table coverage
+  return 60;
 }
 
-// Compute and update all computed columns for a student row
 function computeRow(tr) {
-  // WRITTEN WORKS
+  // Written Works
   const wwHPS = getHPS("ww");
   const wwScores = Array.from(tr.querySelectorAll('.ww-score')).map((x,i)=>Math.min(Number(x.value) || 0, wwHPS[i]));
   const wwTotal = wwScores.reduce((a,b)=>a+b,0);
   const wwTotalHPS = wwHPS.reduce((a,b)=>a+b,0);
   const wwPS = wwTotalHPS > 0 ? (wwTotal/wwTotalHPS)*100 : 0;
   const wwWS = wwPS * 0.4;
-
   tr.querySelector('.ww-total').textContent = wwTotal ? wwTotal.toFixed(0) : '';
   tr.querySelector('.ww-ps').textContent = wwPS ? wwPS.toFixed(1) : '';
   tr.querySelector('.ww-ws').textContent = wwWS ? wwWS.toFixed(1) : '';
-
-  // PERFORMANCE TASK
+  // Performance Task
   const ptHPS = getHPS("pt");
   const ptScores = Array.from(tr.querySelectorAll('.pt-score')).map((x,i)=>Math.min(Number(x.value) || 0, ptHPS[i]));
   const ptTotal = ptScores.reduce((a,b)=>a+b,0);
   const ptTotalHPS = ptHPS.reduce((a,b)=>a+b,0);
   const ptPS = ptTotalHPS > 0 ? (ptTotal/ptTotalHPS)*100 : 0;
   const ptWS = ptPS * 0.4;
-
   tr.querySelector('.pt-total').textContent = ptTotal ? ptTotal.toFixed(0) : '';
   tr.querySelector('.pt-ps').textContent = ptPS ? ptPS.toFixed(1) : '';
   tr.querySelector('.pt-ws').textContent = ptWS ? ptWS.toFixed(1) : '';
-
-  // QUARTERLY ASSESSMENT
+  // Quarterly Assessment
   const qaHPS = getHPS("qa")[0] || 0;
   const qaScore = Number(tr.querySelector('.qa-score').value) || 0;
   const qaPS = qaHPS > 0 ? (qaScore/qaHPS)*100 : 0;
   const qaWS = qaPS * 0.2;
-
   tr.querySelector('.qa-ps').textContent = qaPS ? qaPS.toFixed(1) : '';
   tr.querySelector('.qa-ws').textContent = qaWS ? qaWS.toFixed(1) : '';
-
-  // Initial & Quarterly Grade: sum all WS
+  // Initial & Quarterly Grade
   const initial = wwWS + ptWS + qaWS;
   tr.querySelector('.initial-grade').textContent = initial.toFixed(1);
-
-  // Transmuted Quarterly Grade
   tr.querySelector('.quarterly-grade').textContent = transmuteGrade(initial);
 }
 
-// Compute and update the Highest Possible Score row
 function computeHPSRow() {
   const wwHPS = getHPS("ww");
   const wwTotal = wwHPS.reduce((a, b) => a + b, 0);
@@ -151,7 +130,6 @@ function computeHPSRow() {
   document.getElementById('pt-total-hps').textContent = ptTotal ? ptTotal : '';
 }
 
-// Attach listeners to all existing HPS inputs for recalculating all rows and the HPS row
 function attachHPSListeners() {
   document.querySelectorAll('.ww-hps, .pt-hps, .qa-hps').forEach(input => {
     input.addEventListener('input', () => {
@@ -161,7 +139,6 @@ function attachHPSListeners() {
   });
 }
 
-// On page load// Example data: class and subject -> students
 const classData = {
   "grade-1": {
     math: ["Alice A.", "Bob B.", "Cara C."],
@@ -185,11 +162,9 @@ const changeClassBtn = document.getElementById('change-class-btn');
 let selectedClass = "";
 let selectedSubject = "";
 
-// Hide gradesheet, show selection on load
 gradeSheetSection.style.display = "none";
 classSelectionDiv.style.display = "";
 
-// Show grade sheet with pre-filled students
 startBtn.onclick = function() {
   selectedClass = classSelect.value;
   selectedSubject = subjectSelect.value;
@@ -202,7 +177,6 @@ startBtn.onclick = function() {
     alert("No students found for this class/subject.");
     return;
   }
-  // Fill student rows
   sheetBody.innerHTML = "";
   students.forEach((name, idx) => {
     const tr = document.createElement("tr");
@@ -226,15 +200,12 @@ startBtn.onclick = function() {
     sheetBody.appendChild(tr);
     attachListeners(tr);
   });
-  // Set info text
   sheetClassInfo.textContent = `Class: ${classSelect.options[classSelect.selectedIndex].text} | Subject: ${subjectSelect.options[subjectSelect.selectedIndex].text}`;
-  
   classSelectionDiv.style.display = "none";
   gradeSheetSection.style.display = "";
-  computeHPSRow(); // Compute header row
+  computeHPSRow();
 };
 
-// Allow changing class/subject
 changeClassBtn.onclick = function() {
   gradeSheetSection.style.display = "none";
   classSelectionDiv.style.display = "";
@@ -243,12 +214,7 @@ changeClassBtn.onclick = function() {
   subjectSelect.selectedIndex = 0;
 };
 
-// --- The rest of your grade sheet logic below ---
-// (getHPS, attachListeners, computeRow, computeHPSRow, etc, unchanged from your working version)
-
-// ... (Paste your previous JavaScript for grade calculations and transmutation here) ...
 window.onload = function() {
-  addStudentRow();
   attachHPSListeners();
   computeHPSRow();
 };
