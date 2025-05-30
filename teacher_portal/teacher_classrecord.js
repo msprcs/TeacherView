@@ -1,7 +1,7 @@
-// Sidebar navigation (with highlighting)
+// Sidebar navigation (active highlight)
 function setActiveSidebar(tabId) {
-  document.querySelectorAll('.sidebar-menu').forEach(el => el.classList.remove('sidebar-active'));
-  document.getElementById(tabId).classList.add('sidebar-active');
+  document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
 }
 document.getElementById('home-tab').onclick = function() {
   setActiveSidebar('home-tab');
@@ -17,42 +17,17 @@ document.getElementById('class-record-tab').onclick = function() {
 };
 document.getElementById('announcement-tab').onclick = function() {
   setActiveSidebar('announcement-tab');
-  window.location.href = "teacher_dashboard.html#announcement";
+  window.location.href = "teacher_announcement.html";
 };
-
 document.getElementById('logout-btn').onclick = function () {
   alert('You have been logged out.');
   window.location.reload();
 };
 
+// --- GRADE SHEET LOGIC (as your original) ---
 function getHPS(type) {
   let selector = type === "ww" ? ".ww-hps" : (type === "pt" ? ".pt-hps" : ".qa-hps");
   return Array.from(document.querySelectorAll(selector)).map(x => Number(x.value) || 0);
-}
-
-function addStudentRow() {
-  const tbody = document.getElementById('sheetBody');
-  const rowCount = tbody.rows.length + 1;
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td>${rowCount}</td>
-    <td><input type="text" class="student-name"></td>
-    ${Array(10).fill().map(() => `<td><input type="number" min="0" class="ww-score"></td>`).join("")}
-    <td class="computed ww-total"></td>
-    <td class="computed ww-ps"></td>
-    <td class="computed ww-ws"></td>
-    ${Array(10).fill().map(() => `<td><input type="number" min="0" class="pt-score"></td>`).join("")}
-    <td class="computed pt-total"></td>
-    <td class="computed pt-ps"></td>
-    <td class="computed pt-ws"></td>
-    <td><input type="number" min="0" class="qa-score"></td>
-    <td class="computed qa-ps"></td>
-    <td class="computed qa-ws"></td>
-    <td class="computed initial-grade"></td>
-    <td class="computed quarterly-grade"></td>
-  `;
-  tbody.appendChild(tr);
-  attachListeners(tr);
 }
 
 function attachListeners(tr) {
@@ -139,6 +114,7 @@ function attachHPSListeners() {
   });
 }
 
+// Sample class data
 const classData = {
   "grade-1": {
     math: ["Alice A.", "Bob B.", "Cara C."],
