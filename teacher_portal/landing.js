@@ -11,10 +11,10 @@ function navigateTo(tab) {
       window.location.href = 'teacher_classrecord.html';
       break;
     case 'announcement':
-      window.location.href = 'teacher_dashboard.html#announcement';
+      window.location.href = 'teacher_announcement.html';
       break;
     case 'account':
-      window.location.href = 'teacher_dashboard.html#account';
+      window.location.href = 'teacher_account.html';
       break;
     default:
       // fallback: go to dashboard
