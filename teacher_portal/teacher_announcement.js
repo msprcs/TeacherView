@@ -88,6 +88,9 @@ function renderAnnouncements() {
           img.src = m.dataUrl;
           img.alt = "announcement image";
           img.tabIndex = 0;
+          img.style.width = "100%";
+          img.style.height = "200px";
+          img.style.objectFit = "cover";
           img.onclick = () => showImageModal(m.dataUrl);
           img.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") showImageModal(m.dataUrl); };
           mediaDiv.appendChild(img);

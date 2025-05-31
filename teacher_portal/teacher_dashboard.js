@@ -1,4 +1,4 @@
-// Sidebar toggle logic
+// Sidebar toggle 
 const sidebar = document.getElementById('sidebar');
 const toggleBtn = document.getElementById('sidebar-toggle');
 const showBtn = document.getElementById('show-sidebar-btn');
