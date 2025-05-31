@@ -1,16 +1,194 @@
-.hidden {
-  display: none;
-}
 body {
+  background: #e0f2fe !important;
   font-family: 'Inter', sans-serif;
 }
-#announcement-box {
+.sidebar-gradient {
+  background: linear-gradient(180deg, #38bdf8 0%, #2563eb 100%);
+}
+.sidebar {
+  min-width: 230px;
+  max-width: 260px;
+  border-radius: 32px;
+  box-shadow: 6px 0 32px 0 rgba(37,99,235,0.10);
+  margin: 24px 0 24px 24px;
+  height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  z-index: 10;
+}
+.sidebar-avatar {
+  border: 5px solid #e0f2fe;
+  box-shadow: 0 2px 12px 0 rgba(37,99,235,0.10);
+  border-radius: 24px;
+}
+.sidebar-menu {
+  transition: background 0.2s, padding-left 0.3s, color 0.2s;
+  cursor: pointer;
+  padding-left: 1.25rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2px;
+  color: #e0f2fe;
+  background: transparent;
+  min-height: 48px;
+}
+.sidebar-menu.sidebar-active,
+.sidebar-menu:active,
+.sidebar-menu:focus,
+.sidebar-menu:hover {
+  background: linear-gradient(90deg, #2563eb 70%, #38bdf8 100%);
+  color: #fff;
+  font-weight: bold;
+  padding-left: 2rem;
+}
+.sidebar-logout {
+  color: #38bdf8;
+  background: #e0f2fe;
+  font-weight: bold;
+  border-radius: 9999px;
+  transition: background 0.2s, color 0.2s;
+}
+.sidebar-logout:hover {
+  background: #2563eb;
+  color: #fff;
+}
+@media (max-width: 900px) {
+  .sidebar {
+    margin: 0;
+    border-radius: 0 32px 32px 0;
+    min-width: 70px;
+    max-width: 85px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    position: static;
+  }
+  .sidebar-menu span:not(.icon) {
+    display: none;
+  }
+  .sidebar-menu {
+    justify-content: center;
+    padding-left: 0.5rem;
+  }
+}
+.oval-box {
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #60a5fa 70%, #2563eb 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 0.6rem 1.4rem;
+  margin-bottom: 0.35rem;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
+  text-align: center;
+  width: fit-content;
+  max-width: 100%;
+  word-break: break-word;
+}
+.welcome-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  min-height: 220px;
+}
+.announcement-box {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 2rem;
+  box-shadow: 0 6px 24px 0 rgba(37,99,235,0.08);
+  min-height: 220px;
+  max-width: 850px;
+}
+#announcement-content {
+  gap: 0.25rem !important;
+}
+.announcement-media-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  justify-content: center;
+}
+.announcement-media-img {
+  width: 100%;
+  max-width: 95%;
+  height: auto;
+  max-height: 270px;
+  object-fit: contain;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 14px rgba(37,99,235,0.10);
+  background: #f6fafd;
+  border: 3px solid #e0f2fe;
+  margin: 0.2rem 0;
+  cursor: pointer;
+  transition: box-shadow 0.12s, transform 0.12s;
+  display: block;
+}
+.announcement-media-img:hover {
+  transform: scale(1.025);
+  box-shadow: 0 8px 24px rgba(37,99,235,0.14);
+}
+@media (max-width: 600px) {
+  .announcement-media-img {
+    max-width: 99%;
+    max-height: 160px;
+  }
+}
+
+#img-lightbox-modal {
+  display: flex;
+}
+#img-lightbox-modal.hidden {
+  display: none;
+}
+#img-lightbox-img {
+  box-shadow: 0 12px 48px 0 rgba(37,99,235,0.32);
+}
+#img-lightbox-close {
+  z-index: 5;
+}
+
+#calendar-box,
+#badge-box,
+#qr-box {
   background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
+  border-radius: 2rem;
 }
-.animate-blink {
-  animation: blink 1s step-end infinite;
+.main-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto auto auto;
+  gap: 18px;
+  grid-template-areas:
+      "welcome welcome"
+      "announcement announcement"
+      "calendar qr"
+      "calendar badge";
 }
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+#welcome-section { grid-area: welcome; }
+#announcement-box, .announcement-box { grid-area: announcement; }
+#calendar-box { grid-area: calendar; }
+#qr-box { grid-area: qr; }
+#badge-box { grid-area: badge; }
+
+@media (max-width: 1100px) {
+  .main-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+}
+
+#qr-reader > div {
+  box-shadow: none !important;
+  border: none !important;
+}
+.hidden {
+  display: none;
 }
