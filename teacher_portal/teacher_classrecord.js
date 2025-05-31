@@ -1,196 +1,169 @@
-// Sidebar navigation (active highlight)
-function setActiveSidebar(tabId) {
-  document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-}
+// Sidebar navigation redirects and active tab logic
+const sidebarLinks = document.querySelectorAll('.sidebar-link');
+sidebarLinks.forEach(link => link.classList.remove('active'));
+document.getElementById('class-record-tab').classList.add('active');
+
 document.getElementById('home-tab').onclick = function() {
-  setActiveSidebar('home-tab');
   window.location.href = "teacher_home.html";
 };
 document.getElementById('class-tab').onclick = function() {
-  setActiveSidebar('class-tab');
   window.location.href = "teacher_class.html";
 };
 document.getElementById('class-record-tab').onclick = function() {
-  setActiveSidebar('class-record-tab');
-  window.location.href = "teacher_classrecord.html";
+  sidebarLinks.forEach(link => link.classList.remove('active'));
+  this.classList.add('active');
 };
 document.getElementById('announcement-tab').onclick = function() {
-  setActiveSidebar('announcement-tab');
-  window.location.href = "teacher_announcement.html";
+  window.location.href = "teacher_dashboard.html#announcement";
 };
+
 document.getElementById('logout-btn').onclick = function () {
   alert('You have been logged out.');
   window.location.reload();
 };
 
-// --- GRADE SHEET LOGIC (as your original) ---
-function getHPS(type) {
-  let selector = type === "ww" ? ".ww-hps" : (type === "pt" ? ".pt-hps" : ".qa-hps");
-  return Array.from(document.querySelectorAll(selector)).map(x => Number(x.value) || 0);
-}
-
-function attachListeners(tr) {
-  tr.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', () => {
-      computeRow(tr);
-    });
-  });
-  document.querySelectorAll('.ww-hps, .pt-hps, .qa-hps').forEach(input => {
-    input.addEventListener('input', () => {
-      computeRow(tr);
-    });
-  });
-}
-
-const transmuteTable = [
-  [100, 100, 100],[98.40, 99.99, 99],[96.80, 98.39, 98],[95.21, 96.79, 97],[93.60, 95.19, 96],
-  [92.00, 93.59, 95],[90.40, 91.99, 94],[88.80, 90.39, 93],[87.20, 88.79, 92],[85.60, 87.19, 91],
-  [84.00, 85.59, 90],[82.40, 83.99, 89],[80.80, 82.39, 88],[78.20, 80.79, 87],[77.60, 79.19, 86],
-  [76.00, 77.59, 85],[74.40, 75.99, 84],[72.80, 74.39, 83],[71.20, 72.79, 82],[69.61, 71.19, 81],
-  [68.00, 69.59, 80],[66.40, 67.99, 79],[64.81, 66.39, 78],[63.21, 64.79, 77],[61.60, 63.19, 76],
-  [60.00, 61.59, 75],[56.00, 59.99, 74],[52.01, 55.99, 73],[48.00, 51.99, 72],[44.00, 47.99, 71],
-  [40.01, 43.99, 70],[36.00, 39.99, 69],[32.00, 35.99, 68],[28.00, 31.99, 67],[24.00, 27.99, 66],
-  [20.00, 23.99, 65],[16.00, 19.99, 64],[12.00, 15.99, 63],[8.00, 11.99, 62],[4.00, 7.99, 61],
-  [0.00, 3.99, 60]
-];
-
-function transmuteGrade(initial) {
-  for (const [min, max, grade] of transmuteTable) {
-    if (initial >= min && initial <= max) return grade;
-  }
-  return 60;
-}
-
-function computeRow(tr) {
-  // Written Works
-  const wwHPS = getHPS("ww");
-  const wwScores = Array.from(tr.querySelectorAll('.ww-score')).map((x,i)=>Math.min(Number(x.value) || 0, wwHPS[i]));
-  const wwTotal = wwScores.reduce((a,b)=>a+b,0);
-  const wwTotalHPS = wwHPS.reduce((a,b)=>a+b,0);
-  const wwPS = wwTotalHPS > 0 ? (wwTotal/wwTotalHPS)*100 : 0;
-  const wwWS = wwPS * 0.4;
-  tr.querySelector('.ww-total').textContent = wwTotal ? wwTotal.toFixed(0) : '';
-  tr.querySelector('.ww-ps').textContent = wwPS ? wwPS.toFixed(1) : '';
-  tr.querySelector('.ww-ws').textContent = wwWS ? wwWS.toFixed(1) : '';
-  // Performance Task
-  const ptHPS = getHPS("pt");
-  const ptScores = Array.from(tr.querySelectorAll('.pt-score')).map((x,i)=>Math.min(Number(x.value) || 0, ptHPS[i]));
-  const ptTotal = ptScores.reduce((a,b)=>a+b,0);
-  const ptTotalHPS = ptHPS.reduce((a,b)=>a+b,0);
-  const ptPS = ptTotalHPS > 0 ? (ptTotal/ptTotalHPS)*100 : 0;
-  const ptWS = ptPS * 0.4;
-  tr.querySelector('.pt-total').textContent = ptTotal ? ptTotal.toFixed(0) : '';
-  tr.querySelector('.pt-ps').textContent = ptPS ? ptPS.toFixed(1) : '';
-  tr.querySelector('.pt-ws').textContent = ptWS ? ptWS.toFixed(1) : '';
-  // Quarterly Assessment
-  const qaHPS = getHPS("qa")[0] || 0;
-  const qaScore = Number(tr.querySelector('.qa-score').value) || 0;
-  const qaPS = qaHPS > 0 ? (qaScore/qaHPS)*100 : 0;
-  const qaWS = qaPS * 0.2;
-  tr.querySelector('.qa-ps').textContent = qaPS ? qaPS.toFixed(1) : '';
-  tr.querySelector('.qa-ws').textContent = qaWS ? qaWS.toFixed(1) : '';
-  // Initial & Quarterly Grade
-  const initial = wwWS + ptWS + qaWS;
-  tr.querySelector('.initial-grade').textContent = initial.toFixed(1);
-  tr.querySelector('.quarterly-grade').textContent = transmuteGrade(initial);
-}
-
-function computeHPSRow() {
-  const wwHPS = getHPS("ww");
-  const wwTotal = wwHPS.reduce((a, b) => a + b, 0);
-  document.getElementById('ww-total-hps').textContent = wwTotal ? wwTotal : '';
-  const ptHPS = getHPS("pt");
-  const ptTotal = ptHPS.reduce((a, b) => a + b, 0);
-  document.getElementById('pt-total-hps').textContent = ptTotal ? ptTotal : '';
-}
-
-function attachHPSListeners() {
-  document.querySelectorAll('.ww-hps, .pt-hps, .qa-hps').forEach(input => {
-    input.addEventListener('input', () => {
-      document.querySelectorAll('#sheetBody tr').forEach(tr => computeRow(tr));
-      computeHPSRow();
-    });
-  });
-}
-
-// Sample class data
-const classData = {
-  "grade-1": {
-    math: ["Alice A.", "Bob B.", "Cara C."],
-    english: ["Alice A.", "Bob B.", "Cara C."]
-  },
-  "grade-2": {
-    math: ["Dan D.", "Eve E.", "Finn F."],
-    english: ["Dan D.", "Eve E.", "Finn F."]
-  }
-};
-
-const classSelectionDiv = document.getElementById('class-selection');
-const gradeSheetSection = document.getElementById('grade-sheet-section');
+// Excel upload logic
 const classSelect = document.getElementById('class-select');
-const subjectSelect = document.getElementById('subject-select');
-const startBtn = document.getElementById('start-record-btn');
-const sheetBody = document.getElementById('sheetBody');
-const sheetClassInfo = document.getElementById('sheet-classinfo');
-const changeClassBtn = document.getElementById('change-class-btn');
+const excelInput = document.getElementById('excel-file');
+const uploadBtn = document.getElementById('upload-btn');
+const fileSummaryDiv = document.getElementById('file-summary');
+const quarterSummariesDiv = document.getElementById('quarter-summaries');
+const subjectSummaryDiv = document.getElementById('subject-summary');
 
-let selectedClass = "";
-let selectedSubject = "";
+let excelFile = null;
 
-gradeSheetSection.style.display = "none";
-classSelectionDiv.style.display = "";
+classSelect.addEventListener('change', function() {
+  checkUploadEnabled();
+  fileSummaryDiv.style.display = 'none';
+  quarterSummariesDiv.innerHTML = '';
+  subjectSummaryDiv.innerHTML = '';
+  excelInput.value = '';
+  excelFile = null;
+  uploadBtn.disabled = true;
+});
 
-startBtn.onclick = function() {
-  selectedClass = classSelect.value;
-  selectedSubject = subjectSelect.value;
-  if (!selectedClass || !selectedSubject) {
-    alert("Please select both class and subject.");
+excelInput.addEventListener('change', function() {
+  excelFile = this.files[0] || null;
+  checkUploadEnabled();
+  fileSummaryDiv.style.display = 'none';
+  quarterSummariesDiv.innerHTML = '';
+  subjectSummaryDiv.innerHTML = '';
+});
+
+function checkUploadEnabled() {
+  uploadBtn.disabled = !(classSelect.value && excelInput.files.length);
+}
+
+uploadBtn.addEventListener('click', function() {
+  if (!classSelect.value || !excelFile) {
+    alert('Please select a class and upload an Excel file.');
     return;
   }
-  const students = (classData[selectedClass] && classData[selectedClass][selectedSubject]) || [];
-  if (students.length === 0) {
-    alert("No students found for this class/subject.");
-    return;
-  }
-  sheetBody.innerHTML = "";
-  students.forEach((name, idx) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${idx+1}</td>
-      <td class="student-name"><span>${name}</span></td>
-      ${Array(10).fill().map(() => `<td><input type="number" min="0" class="ww-score"></td>`).join("")}
-      <td class="computed ww-total"></td>
-      <td class="computed ww-ps"></td>
-      <td class="computed ww-ws"></td>
-      ${Array(10).fill().map(() => `<td><input type="number" min="0" class="pt-score"></td>`).join("")}
-      <td class="computed pt-total"></td>
-      <td class="computed pt-ps"></td>
-      <td class="computed pt-ws"></td>
-      <td><input type="number" min="0" class="qa-score"></td>
-      <td class="computed qa-ps"></td>
-      <td class="computed qa-ws"></td>
-      <td class="computed initial-grade"></td>
-      <td class="computed quarterly-grade"></td>
-    `;
-    sheetBody.appendChild(tr);
-    attachListeners(tr);
+  fileSummaryDiv.style.display = 'none';
+  quarterSummariesDiv.innerHTML = '';
+  subjectSummaryDiv.innerHTML = '';
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      let data = new Uint8Array(ev.target.result);
+      let workbook = XLSX.read(data, {type: 'array'});
+      let sheetNames = workbook.SheetNames;
+
+      // Expected: Quarter 1, Quarter 2, Quarter 3, Quarter 4
+      const quarters = ['Quarter 1', 'Quarter 2', 'Quarter 3', 'Quarter 4'];
+      quarterSummariesDiv.innerHTML = '';
+
+      quarters.forEach(qtr => {
+        if (sheetNames.includes(qtr)) {
+          const worksheet = workbook.Sheets[qtr];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+          const relCols = [
+            'Student Name','Written Works','Performance Task','Quarterly Assessment',
+            'Initial Grade','Quarterly Grade','Subject'
+          ];
+          let filtered = jsonData.map(row => {
+            let filteredRow = {};
+            for (let col in row) {
+              const colMatch = relCols.find(c => c.toLowerCase() === col.toLowerCase());
+              if (colMatch)
+                filteredRow[colMatch] = row[col];
+            }
+            return filteredRow;
+          });
+          let quarterDiv = document.createElement('div');
+          quarterDiv.innerHTML = `<div class="quarter-title">${qtr}</div>${renderSummaryTable(filtered.length ? filtered : jsonData)}`;
+          quarterSummariesDiv.appendChild(quarterDiv);
+        }
+      });
+
+      // Summary of Quarterly Grades (sheet: "Summary" or similar)
+      let summarySheetName = sheetNames.find(name =>
+        name.trim().toLowerCase() === "summary" ||
+        name.trim().toLowerCase() === "summary of quarterly grades" ||
+        name.trim().toLowerCase() === "quarterly grades summary"
+      );
+      if (summarySheetName) {
+        const worksheet = workbook.Sheets[summarySheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+        subjectSummaryDiv.innerHTML = renderSummaryTable(jsonData);
+      } else {
+        // Fallback: Compute from all quarters' "Quarterly Grade" grouped by subject
+        let allData = [];
+        quarters.forEach(qtr => {
+          if (sheetNames.includes(qtr)) {
+            const worksheet = workbook.Sheets[qtr];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+            allData = allData.concat(jsonData);
+          }
+        });
+        subjectSummaryDiv.innerHTML = renderSummaryTable(getQuarterlySummary(allData));
+      }
+
+      fileSummaryDiv.style.display = 'block';
+    } catch (e) {
+      quarterSummariesDiv.innerHTML = `<span style="color:red">Error reading Excel file: ${e.message}</span>`;
+      fileSummaryDiv.style.display = 'block';
+      subjectSummaryDiv.innerHTML = '';
+    }
+  };
+  reader.onerror = function() {
+    quarterSummariesDiv.innerHTML = `<span style="color:red">Could not read file.</span>`;
+    fileSummaryDiv.style.display = 'block';
+    subjectSummaryDiv.innerHTML = '';
+  };
+  reader.readAsArrayBuffer(excelFile);
+});
+
+function renderSummaryTable(data) {
+  if (!data.length) return '<span style="color:#aaa">No records found.</span>';
+  let headers = Object.keys(data[0]);
+  let html = '<table><thead><tr>';
+  headers.forEach(h => html += `<th>${h}</th>`);
+  html += '</tr></thead><tbody>';
+  data.forEach(row => {
+    html += '<tr>';
+    headers.forEach(h => html += `<td>${row[h] !== undefined ? row[h] : ''}</td>`);
+    html += '</tr>';
   });
-  sheetClassInfo.textContent = `Class: ${classSelect.options[classSelect.selectedIndex].text} | Subject: ${subjectSelect.options[subjectSelect.selectedIndex].text}`;
-  classSelectionDiv.style.display = "none";
-  gradeSheetSection.style.display = "";
-  computeHPSRow();
-};
+  html += '</tbody></table>';
+  return html;
+}
 
-changeClassBtn.onclick = function() {
-  gradeSheetSection.style.display = "none";
-  classSelectionDiv.style.display = "";
-  sheetBody.innerHTML = "";
-  classSelect.selectedIndex = 0;
-  subjectSelect.selectedIndex = 0;
-};
-
-window.onload = function() {
-  attachHPSListeners();
-  computeHPSRow();
-};
+function getQuarterlySummary(data) {
+  // Group by subject if present, else show summary for all
+  let subjects = {};
+  data.forEach(row => {
+    let subject = row['Subject'] || row['subject'] || 'N/A';
+    let qgrade = row['Quarterly Grade'] || row['Quarterly grade'] || row['quarterly grade'] || row['quarterly_grade'] || row['Quarterly_Grade'] || null;
+    if (!subjects[subject]) subjects[subject] = [];
+    if (qgrade != null && qgrade !== "" && !isNaN(qgrade)) subjects[subject].push(Number(qgrade));
+  });
+  let summary = [];
+  for (let subject in subjects) {
+    if (subjects[subject].length) {
+      let avg = subjects[subject].reduce((a, b) => a + b, 0) / subjects[subject].length;
+      summary.push({ 'Subject': subject, 'Average Quarterly Grade': avg.toFixed(2) });
+    }
+  }
+  return summary;
+}
