@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Announcement Page</title>
+  <link rel="stylesheet" href="announcement_admin.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Main Announcement Slideshow (Admin Only) -->
+    <div class="main-announcement" id="mainBox">
+      <div class="main-ann-content">
+        <div class="main-ann-title">No Main Announcement</div>
+      </div>
+    </div>
+    <!-- Slideshow Dots -->
+    <div class="page-dots" id="dotsContainer">
+      <div class="page-dot" onclick="setMainAnnouncement(0)"></div>
+      <div class="page-dot" onclick="setMainAnnouncement(1)"></div>
+      <div class="page-dot" onclick="setMainAnnouncement(2)"></div>
+    </div>
+    <!-- Bottom Section -->
+    <div class="bottom">
+      <!-- Left: 3 Boxes for Teacher Announcements -->
+      <div class="announcement-list" id="announcementList">
+        <div class="announcement-box" id="box1"
+             data-detail=""
+             onmouseover="showPopup(event, 0)" 
+             onmouseout="hidePopup()"
+             onclick="showDetails(0)">
+          Box 1
+        </div>
+        <div class="announcement-box" id="box2"
+             data-detail=""
+             onmouseover="showPopup(event, 1)" 
+             onmouseout="hidePopup()"
+             onclick="showDetails(1)">
+          Box 2
+        </div>
+        <div class="announcement-box" id="box3"
+             data-detail=""
+             onmouseover="showPopup(event, 2)" 
+             onmouseout="hidePopup()"
+             onclick="showDetails(2)">
+          Box 3
+        </div>
+      </div>
+      <!-- Right: Details (Bigger for image) -->
+      <div class="announcement-details large" id="detailsBox">
+        Select an announcement to view details here.
+      </div>
+    </div>
+    <!-- Popup element -->
+    <div class="popup" id="popup"></div>
+    <!-- Modal for image preview -->
+    <div class="image-modal-overlay" id="imageModalOverlay" style="display:none;">
+      <div class="image-modal">
+        <img src="" alt="Announcement Image" id="modalImage" />
+        <button onclick="closeImageModal()">Close</button>
+      </div>
+    </div>
+  </div>
+  <script>
+/** --------- ADMIN MAIN ANNOUNCEMENT SLIDESHOW ----------- **/
+function getAdminAnnouncements() {
+  // Should be an array of objects: [{title, message, images (optional)} ...]
+  try {
+    return JSON.parse(localStorage.getItem("admin_announcements") || "[]");
+  } catch (e) { return []; }
+}
+let mainIndex = 0;
+
+function renderMainAnnouncement(forceEmpty=false) {
+  let adminAnnouncements = getAdminAnnouncements();
+  // Always show 3 slides even if empty, with placeholder content if needed
+  let slides = [];
+  for(let i=0; i<3; i++) {
+    if (adminAnnouncements[i] && !forceEmpty) {
+      slides.push(adminAnnouncements[i]);
+    } else {
+      slides.push({
+        title: "No Main Announcement",
+        message: "",
+        images: []
+      });
+    }
+  }
+  // Bound index
+  if(mainIndex >= slides.length) mainIndex = 0;
+  const mainBox = document.getElementById('mainBox');
+  const dots = document.querySelectorAll('.page-dot');
+  // Show current main announcement
+  let curr = slides[mainIndex];
+  let html = `<div class="main-ann-content">`;
+  if (curr.title)
+    html += `<div class="main-ann-title">${curr.title}</div>`;
+  if (curr.message)
+    html += `<div class="main-ann-msg">${curr.message}</div>`;
+  if (curr.images && curr.images.length) {
+    html += `<div class="main-ann-imgs">`;
+    curr.images.forEach(img => {
+      if (img.type && img.type.startsWith("image/")) {
+        html += `<img src="${img.dataUrl}" class="main-ann-img" alt="Admin Announcement Image" onclick="showImageModal('${img.dataUrl}')"/>`;
+      }
+    });
+    html += `</div>`;
+  }
+  html += "</div>";
+  mainBox.innerHTML = html;
+
+  // Dots
+  dots.forEach((dot, i) => {
+    dot.classList.toggle("active", i === mainIndex);
+    dot.style.cursor = "pointer";
+    dot.style.opacity = "1";
+  });
+}
+function setMainAnnouncement(i) {
+  mainIndex = i;
+  renderMainAnnouncement();
+}
+// Slideshow
+setInterval(() => {
+  mainIndex = (mainIndex + 1) % 3;
+  renderMainAnnouncement();
+}, 3000);
+
+/** --------- TEACHER ANNOUNCEMENTS (3 Boxes) ----------- **/
+function getLatestTeacherAnnouncements() {
+  let arr = [];
+  try {
+    arr = JSON.parse(localStorage.getItem("announcements") || "[]");
+  } catch (e) { arr = []; }
+  return arr.slice(0, 3); // latest 3, newest first
+}
+let teacherAnnouncements = getLatestTeacherAnnouncements();
+
+function renderBoxes() {
+  teacherAnnouncements = getLatestTeacherAnnouncements();
+  const boxes = [
+    document.getElementById('box1'),
+    document.getElementById('box2'),
+    document.getElementById('box3')
+  ];
+  boxes.forEach((box, i) => {
+    if (teacherAnnouncements[i]) {
+      box.innerText = teacherAnnouncements[i].title || "No Title";
+      box.setAttribute("data-detail", teacherAnnouncements[i].message ? teacherAnnouncements[i].title + "\n" + teacherAnnouncements[i].message : teacherAnnouncements[i].title);
+      box.style.opacity = "1";
+      box.style.pointerEvents = "auto";
+    } else {
+      box.innerText = "No Announcement";
+      box.setAttribute("data-detail", "");
+      box.style.opacity = "0.5";
+      box.style.pointerEvents = "none";
+    }
+  });
+}
+
+/** --------- TEACHER ANNOUNCEMENT DETAILS (BIGGER, IMAGE FILL) ----------- **/
+function showDetails(i) {
+  if (teacherAnnouncements[i]) {
+    let html = `<div class="details-title">${teacherAnnouncements[i].title || ""}</div>`;
+    if (teacherAnnouncements[i].grade) html += `<div class="details-grade">For: ${teacherAnnouncements[i].grade}</div>`;
+    html += `<div class="details-message">${teacherAnnouncements[i].message || ""}</div>`;
+    // Images fill the container, clickable
+    if (teacherAnnouncements[i].images && teacherAnnouncements[i].images.length) {
+      html += `<div class="details-images">`;
+      teacherAnnouncements[i].images.forEach(m => {
+        if (m.type && m.type.startsWith("image/")) {
+          html += `<img src="${m.dataUrl}" class="details-img" onclick="showImageModal('${m.dataUrl}')" alt="announcement image" />`;
+        }
+      });
+      html += `</div>`;
+    }
+    html += `<div class="details-time">${teacherAnnouncements[i].time ? new Date(teacherAnnouncements[i].time).toLocaleString() : ""}</div>`;
+    document.getElementById("detailsBox").innerHTML = html;
+  }
+}
+
+/** --------- POPUP ----------- **/
+function showPopup(event, i) {
+  const popup = document.getElementById('popup');
+  const box = event.currentTarget;
+  const detail = box.getAttribute('data-detail');
+  popup.innerText = detail;
+  const rect = box.getBoundingClientRect();
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+  popup.style.left = (rect.left + rect.width/2 - 110 + scrollLeft) + "px";
+  popup.style.top = (rect.top - 44 + scrollTop) + "px";
+  if (teacherAnnouncements[i]) popup.classList.add('active');
+}
+function hidePopup() {
+  document.getElementById('popup').classList.remove('active');
+}
+
+/** --------- IMAGE MODAL ----------- **/
+function showImageModal(url) {
+  const overlay = document.getElementById('imageModalOverlay');
+  const img = document.getElementById('modalImage');
+  img.src = url;
+  overlay.style.display = 'flex';
+}
+function closeImageModal() {
+  document.getElementById('imageModalOverlay').style.display = 'none';
+}
+
+/** --------- UPDATE ON STORAGE ----------- **/
+window.addEventListener('storage', function(e) {
+  if (e.key === "admin_announcements") renderMainAnnouncement();
+  if (e.key === "announcements") renderBoxes();
+});
+
+/** --------- INITIALIZATION ----------- **/
+document.addEventListener('DOMContentLoaded', () => {
+  renderMainAnnouncement();
+  renderBoxes();
+});
+  </script>
+</body>
+</html>

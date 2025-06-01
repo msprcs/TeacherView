@@ -1,4 +1,4 @@
-// Sidebar navigation redirects and active tab logic
+// Sidebar navigation logic
 const sidebarLinks = document.querySelectorAll('.sidebar-link');
 sidebarLinks.forEach(link => link.classList.remove('active'));
 document.getElementById('class-record-tab').classList.add('active');
@@ -27,16 +27,14 @@ const classSelect = document.getElementById('class-select');
 const excelInput = document.getElementById('excel-file');
 const uploadBtn = document.getElementById('upload-btn');
 const fileSummaryDiv = document.getElementById('file-summary');
-const quarterSummariesDiv = document.getElementById('quarter-summaries');
-const subjectSummaryDiv = document.getElementById('subject-summary');
+const worksheetListDiv = document.getElementById('worksheet-list');
 
 let excelFile = null;
 
 classSelect.addEventListener('change', function() {
   checkUploadEnabled();
   fileSummaryDiv.style.display = 'none';
-  quarterSummariesDiv.innerHTML = '';
-  subjectSummaryDiv.innerHTML = '';
+  worksheetListDiv.innerHTML = '';
   excelInput.value = '';
   excelFile = null;
   uploadBtn.disabled = true;
@@ -46,12 +44,87 @@ excelInput.addEventListener('change', function() {
   excelFile = this.files[0] || null;
   checkUploadEnabled();
   fileSummaryDiv.style.display = 'none';
-  quarterSummariesDiv.innerHTML = '';
-  subjectSummaryDiv.innerHTML = '';
+  worksheetListDiv.innerHTML = '';
 });
 
 function checkUploadEnabled() {
   uploadBtn.disabled = !(classSelect.value && excelInput.files.length);
+}
+
+// Always render all columns/rows, and ensure all content is shown with horizontal scroll if needed
+function worksheetToHTMLTable(worksheet) {
+  if (!worksheet['!ref']) return '<div class="worksheet-table-wrap"><em>Empty sheet</em></div>';
+  const range = XLSX.utils.decode_range(worksheet['!ref']);
+  let merges = worksheet["!merges"] || [];
+  // Build a grid to store merged info
+  let grid = [];
+  for (let r = range.s.r; r <= range.e.r; r++) {
+    grid[r] = [];
+    for (let c = range.s.c; c <= range.e.c; c++) {
+      grid[r][c] = {skip: false, colspan: 1, rowspan: 1};
+    }
+  }
+  // Mark merged cells
+  merges.forEach(function(m) {
+    grid[m.s.r][m.s.c].colspan = (m.e.c - m.s.c + 1);
+    grid[m.s.r][m.s.c].rowspan = (m.e.r - m.s.r + 1);
+    for (let r = m.s.r; r <= m.e.r; r++) {
+      for (let c = m.s.c; c <= m.e.c; c++) {
+        if (r !== m.s.r || c !== m.s.c) {
+          grid[r][c].skip = true;
+        }
+      }
+    }
+  });
+
+  // Find 'Quarterly Grade' column index (case-insensitive) and header row
+  let qgColIdx = -1;
+  let headerRowIdx = range.s.r;
+  for (let C = range.s.c; C <= range.e.c; ++C) {
+    const cellAddress = XLSX.utils.encode_cell({r: headerRowIdx, c: C});
+    const cell = worksheet[cellAddress];
+    if (cell && typeof cell.v === "string" && cell.v.trim().toLowerCase().includes("quarterly grade")) {
+      qgColIdx = C;
+    }
+  }
+
+  let html = '<div class="worksheet-table-wrap"><table>';
+  for (let R = range.s.r; R <= range.e.r; ++R) {
+    html += '<tr>';
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      if (grid[R][C].skip) continue;
+      const cellAddress = XLSX.utils.encode_cell({r: R, c: C});
+      const cell = worksheet[cellAddress];
+      let val = (cell && typeof cell.v !== "undefined" && cell.v !== null) ? cell.v : "";
+
+      // Try to preserve Excel formatting (bold, color, align) if present in cell.s (cell style)
+      let style = "";
+      if (cell && cell.s) {
+        if (cell.s.bold) style += "font-weight:bold;";
+        if (cell.s.italic) style += "font-style:italic;";
+        if (cell.s.color && cell.s.color.rgb) style += `color:#${cell.s.color.rgb};`;
+        if (cell.s.fill && cell.s.fill.fgColor && cell.s.fill.fgColor.rgb) style += `background:#${cell.s.fill.fgColor.rgb};`;
+        if (cell.s.alignment && cell.s.alignment.horizontal) style += `text-align:${cell.s.alignment.horizontal};`;
+      }
+
+      let cellTag = (R === headerRowIdx ? 'th' : 'td');
+      let colspan = grid[R][C].colspan > 1 ? ` colspan="${grid[R][C].colspan}"` : '';
+      let rowspan = grid[R][C].rowspan > 1 ? ` rowspan="${grid[R][C].rowspan}"` : '';
+
+      // Quarterly Grade color logic
+      let extraClass = "";
+      if (cellTag === "td" && qgColIdx !== -1 && C === qgColIdx) {
+        let v = String(val).trim().toLowerCase();
+        if (v === "passed" || v === "pass") extraClass = "qg-pass";
+        else if (v === "failed" || v === "fail") extraClass = "qg-fail";
+      }
+
+      html += `<${cellTag}${colspan}${rowspan}${extraClass ? ` class="${extraClass}"` : ""}${style ? ` style="${style}"` : ""}>${val === undefined ? "" : val}</${cellTag}>`;
+    }
+    html += '</tr>';
+  }
+  html += '</table></div>';
+  return html;
 }
 
 uploadBtn.addEventListener('click', function() {
@@ -60,110 +133,34 @@ uploadBtn.addEventListener('click', function() {
     return;
   }
   fileSummaryDiv.style.display = 'none';
-  quarterSummariesDiv.innerHTML = '';
-  subjectSummaryDiv.innerHTML = '';
+  worksheetListDiv.innerHTML = '';
   const reader = new FileReader();
   reader.onload = function(ev) {
     try {
       let data = new Uint8Array(ev.target.result);
-      let workbook = XLSX.read(data, {type: 'array'});
+      let workbook = XLSX.read(data, {type: 'array', cellStyles: true});
       let sheetNames = workbook.SheetNames;
 
-      // Expected: Quarter 1, Quarter 2, Quarter 3, Quarter 4
-      const quarters = ['Quarter 1', 'Quarter 2', 'Quarter 3', 'Quarter 4'];
-      quarterSummariesDiv.innerHTML = '';
-
-      quarters.forEach(qtr => {
-        if (sheetNames.includes(qtr)) {
-          const worksheet = workbook.Sheets[qtr];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-          const relCols = [
-            'Student Name','Written Works','Performance Task','Quarterly Assessment',
-            'Initial Grade','Quarterly Grade','Subject'
-          ];
-          let filtered = jsonData.map(row => {
-            let filteredRow = {};
-            for (let col in row) {
-              const colMatch = relCols.find(c => c.toLowerCase() === col.toLowerCase());
-              if (colMatch)
-                filteredRow[colMatch] = row[col];
-            }
-            return filteredRow;
-          });
-          let quarterDiv = document.createElement('div');
-          quarterDiv.innerHTML = `<div class="quarter-title">${qtr}</div>${renderSummaryTable(filtered.length ? filtered : jsonData)}`;
-          quarterSummariesDiv.appendChild(quarterDiv);
-        }
+      worksheetListDiv.innerHTML = '';
+      sheetNames.forEach((sheetName, idx) => {
+        const worksheet = workbook.Sheets[sheetName];
+        if (!worksheet['!ref']) return;
+        let sheetDiv = document.createElement('div');
+        sheetDiv.innerHTML =
+          `<div class="worksheet-title">${sheetName}</div>` +
+          worksheetToHTMLTable(worksheet);
+        worksheetListDiv.appendChild(sheetDiv);
       });
-
-      // Summary of Quarterly Grades (sheet: "Summary" or similar)
-      let summarySheetName = sheetNames.find(name =>
-        name.trim().toLowerCase() === "summary" ||
-        name.trim().toLowerCase() === "summary of quarterly grades" ||
-        name.trim().toLowerCase() === "quarterly grades summary"
-      );
-      if (summarySheetName) {
-        const worksheet = workbook.Sheets[summarySheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-        subjectSummaryDiv.innerHTML = renderSummaryTable(jsonData);
-      } else {
-        // Fallback: Compute from all quarters' "Quarterly Grade" grouped by subject
-        let allData = [];
-        quarters.forEach(qtr => {
-          if (sheetNames.includes(qtr)) {
-            const worksheet = workbook.Sheets[qtr];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-            allData = allData.concat(jsonData);
-          }
-        });
-        subjectSummaryDiv.innerHTML = renderSummaryTable(getQuarterlySummary(allData));
-      }
 
       fileSummaryDiv.style.display = 'block';
     } catch (e) {
-      quarterSummariesDiv.innerHTML = `<span style="color:red">Error reading Excel file: ${e.message}</span>`;
+      worksheetListDiv.innerHTML = `<span style="color:red">Error reading Excel file: ${e.message}</span>`;
       fileSummaryDiv.style.display = 'block';
-      subjectSummaryDiv.innerHTML = '';
     }
   };
   reader.onerror = function() {
-    quarterSummariesDiv.innerHTML = `<span style="color:red">Could not read file.</span>`;
+    worksheetListDiv.innerHTML = `<span style="color:red">Could not read file.</span>`;
     fileSummaryDiv.style.display = 'block';
-    subjectSummaryDiv.innerHTML = '';
   };
   reader.readAsArrayBuffer(excelFile);
 });
-
-function renderSummaryTable(data) {
-  if (!data.length) return '<span style="color:#aaa">No records found.</span>';
-  let headers = Object.keys(data[0]);
-  let html = '<table><thead><tr>';
-  headers.forEach(h => html += `<th>${h}</th>`);
-  html += '</tr></thead><tbody>';
-  data.forEach(row => {
-    html += '<tr>';
-    headers.forEach(h => html += `<td>${row[h] !== undefined ? row[h] : ''}</td>`);
-    html += '</tr>';
-  });
-  html += '</tbody></table>';
-  return html;
-}
-
-function getQuarterlySummary(data) {
-  // Group by subject if present, else show summary for all
-  let subjects = {};
-  data.forEach(row => {
-    let subject = row['Subject'] || row['subject'] || 'N/A';
-    let qgrade = row['Quarterly Grade'] || row['Quarterly grade'] || row['quarterly grade'] || row['quarterly_grade'] || row['Quarterly_Grade'] || null;
-    if (!subjects[subject]) subjects[subject] = [];
-    if (qgrade != null && qgrade !== "" && !isNaN(qgrade)) subjects[subject].push(Number(qgrade));
-  });
-  let summary = [];
-  for (let subject in subjects) {
-    if (subjects[subject].length) {
-      let avg = subjects[subject].reduce((a, b) => a + b, 0) / subjects[subject].length;
-      summary.push({ 'Subject': subject, 'Average Quarterly Grade': avg.toFixed(2) });
-    }
-  }
-  return summary;
-}

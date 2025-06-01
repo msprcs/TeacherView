@@ -7,7 +7,6 @@ body {
   display: flex;
 }
 
-/* ========== SIDEBAR ========== */
 .sidebar {
   background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
   color: #fff;
@@ -131,7 +130,6 @@ body {
   color: #fff;
 }
 
-/* ========== MAIN ========== */
 main {
   margin-left: 280px;
   width: calc(100vw - 280px);
@@ -140,14 +138,13 @@ main {
   flex-direction: column;
 }
 
-/* ========== SHEET BOX ========== */
 .sheet-box {
   margin: 2.2em auto 0 auto;
   background: #fafdff;
   border-radius: 20px;
   box-shadow: 0 8px 24px #60a5fa22, 0 1.5px 8px #2563eb12;
   padding: 30px 30px 24px 30px;
-  max-width: 950px;
+  max-width: 1100px;
   min-width: 350px;
   width: 100%;
   overflow-x: auto;
@@ -157,7 +154,6 @@ main {
   align-items: center;
 }
 
-/* ========== SELECTION BOX ========== */
 #class-selection {
   display: flex;
   flex-direction: column;
@@ -166,7 +162,7 @@ main {
   min-height: 180px;
   padding: 25px 0 22px 0;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
   background: #e0eaff;
   border-radius: 1.3em;
   box-shadow: 0 2px 10px #2563eb18;
@@ -175,22 +171,19 @@ main {
 }
 
 .class-upload-box {
-  width: 90%;
-  max-width: 800px;
+  width: 97%;
+  max-width: 950px;
   min-width: 450px;
   margin: 0 auto 20px auto;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  gap: 30px;
+  align-items: flex-end;
+  gap: 40px;
   justify-content: flex-start;
 }
-
-.class-upload-box label,
-.class-upload-box select,
-.class-upload-box input,
-.class-upload-box button {
-  display: block;
+.class-upload-box > div {
+  flex: 1;
+  min-width: 180px;
 }
 
 .class-upload-box label {
@@ -202,9 +195,7 @@ main {
 
 .class-upload-box select,
 .class-upload-box input[type="file"] {
-  width: 240px;
-  max-width: 350px;
-  min-width: 150px;
+  width: 100%;
   font-size: 1.06em;
   padding: 10px 20px;
   margin-bottom: 8px;
@@ -222,7 +213,7 @@ main {
 }
 
 .upload-btn {
-  width: 150px;
+  width: 140px;
   font-size: 1.09em;
   padding: 11px 0;
   margin-top: 8px;
@@ -255,47 +246,66 @@ main {
   padding: 16px 15px 12px 15px;
   font-size: 0.98em;
   min-width: 350px;
-}
-#file-summary h4 {
-  margin: 8px 0 8px 0;
-  color: #2563eb;
-  font-weight: bold;
-}
-#quarter-summaries {
-  margin-bottom: 18px;
-}
-.quarter-title {
-  color: #1749b3;
-  margin: 16px 0 6px 0;
-  font-size: 1.08em;
-  font-weight: bold;
-}
-#summary-table, #subject-summary {
-  margin-bottom: 10px;
   overflow-x: auto;
 }
-#summary-table table, #subject-summary table {
-  border-collapse: collapse;
+
+#worksheet-list {
   width: 100%;
-  font-size: 0.94em;
 }
-#summary-table th, #summary-table td, #subject-summary th, #subject-summary td {
+
+.worksheet-title {
+  color: #1749b3;
+  margin: 25px 0 10px 0;
+  font-size: 1.11em;
+  font-weight: bold;
+  letter-spacing: 0.01em;
+}
+
+.worksheet-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Ensures horizontal scroll for wide tables */
+.worksheet-table-wrap table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 600px;
+  font-size: 1em;
+  margin-bottom: 8px;
+  background: white;
+  max-width: none;
+}
+.worksheet-table-wrap th, .worksheet-table-wrap td {
   border: 1px solid #b3c8e6;
-  padding: 3px 8px;
+  padding: 5px 10px;
   text-align: center;
+  white-space: pre-line;
+  font-size: 1em;
+  transition: background 0.2s;
 }
-#summary-table th, #subject-summary th {
+.worksheet-table-wrap th {
   background: #e0eaff;
   font-weight: bold;
   color: #234060;
 }
-#summary-table td, #subject-summary td {
+.worksheet-table-wrap td {
   background: #fafdff;
+}
+.qg-pass {
+  background: #d1fae5 !important;
+  color: #047857 !important;
+  font-weight: bold;
+}
+.qg-fail {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+  font-weight: bold;
 }
 @media (max-width: 1100px) {
   .sheet-box { max-width: 99vw; }
   #class-selection { max-width: 99vw; }
-  .class-upload-box { min-width: 250px; gap: 10px; }
+  .class-upload-box { min-width: 250px; gap: 20px; }
 }
 @media (max-width: 900px) {
   .class-upload-box { flex-direction: column; align-items: flex-start; width: 100%; min-width: 0; }
